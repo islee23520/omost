@@ -2,20 +2,27 @@
   "name": "@oh-my-opencode/ulw-loop-state",
   "version": "0.1.0",
   "type": "module",
-  "private": true,
   "description": "Host-neutral TypeScript state machine for standalone ULW loops.",
   "exports": {
     ".": {
       "types": "./index.d.ts",
-      "import": "./src/index.ts"
+      "import": "./dist/index.js"
     }
   },
   "types": "./index.d.ts",
   "scripts": {
+    "build": "bun build ./src/index.ts --outdir ./dist --target bun --format esm --external='@oh-my-opencode/*'",
     "typecheck": "tsgo --noEmit -p tsconfig.json",
     "test": "bun test src/*.test.ts"
   },
   "dependencies": {
     "@oh-my-opencode/utils": "workspace:*"
-  }
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "files": [
+    "dist",
+    "src",
+    "index.d.ts"
+  ]
 }

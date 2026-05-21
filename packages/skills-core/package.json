@@ -1,8 +1,8 @@
 {
-  "name": "@oh-my-opencode/ulw-host-contract",
+  "name": "@oh-my-opencode/skills-core",
   "version": "0.1.0",
   "type": "module",
-  "description": "Host-neutral TypeScript contract for standalone ULW runtime adapters.",
+  "description": "Standalone OMO builtin skills catalog extracted from the original plugin.",
   "exports": {
     ".": {
       "types": "./index.d.ts",
@@ -13,7 +13,7 @@
   "scripts": {
     "build": "bun build ./src/index.ts --outdir ./dist --target bun --format esm --external='@oh-my-opencode/*'",
     "typecheck": "tsgo --noEmit -p tsconfig.json",
-    "test": "bun test src/*.test.ts"
+    "test": "bun test src/*.test.ts src/skills/*.test.ts --coverage"
   },
   "main": "./dist/index.js",
   "module": "./dist/index.js",
