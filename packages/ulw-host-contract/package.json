@@ -1,0 +1,18 @@
+{
+  "name": "@oh-my-opencode/ulw-host-contract",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "description": "Host-neutral TypeScript contract for standalone ULW runtime adapters.",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./src/index.ts"
+    }
+  },
+  "types": "./index.d.ts",
+  "scripts": {
+    "typecheck": "tsgo --noEmit -p tsconfig.json",
+    "test": "bun test src/*.test.ts"
+  }
+}

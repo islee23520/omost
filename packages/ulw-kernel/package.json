@@ -1,0 +1,23 @@
+{
+  "name": "@oh-my-opencode/ulw-kernel",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "description": "Composable TypeScript kernel for standalone ULW execution.",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./src/index.ts"
+    }
+  },
+  "types": "./index.d.ts",
+  "scripts": {
+    "typecheck": "tsgo --noEmit -p tsconfig.json",
+    "test": "bun test src/*.test.ts"
+  },
+  "dependencies": {
+    "@oh-my-opencode/ulw-host-contract": "workspace:*",
+    "@oh-my-opencode/ulw-intent": "workspace:*",
+    "@oh-my-opencode/ulw-loop-state": "workspace:*"
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "name": "omo-standalone",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Standalone ULW extraction workspace for Oh My OpenAgent.",
+  "workspaces": [
+    "packages/rules-engine",
+    "packages/utils",
+    "packages/model-core",
+    "packages/comment-checker-core",
+    "packages/boulder-state",
+    "packages/agents-md-core",
+    "packages/ast-grep-core",
+    "packages/ulw-host-contract",
+    "packages/ulw-intent",
+    "packages/ulw-loop-state",
+    "packages/ulw-kernel"
+  ],
+  "scripts": {
+    "test": "bun test",
+    "test:boundary": "bun run scripts/check-opencode-boundary.ts",
+    "typecheck:packages": "tsgo --noEmit -p packages/rules-engine/tsconfig.json && tsgo --noEmit -p packages/utils/tsconfig.json && tsgo --noEmit -p packages/model-core/tsconfig.json && tsgo --noEmit -p packages/comment-checker-core/tsconfig.json && tsgo --noEmit -p packages/boulder-state/tsconfig.json && tsgo --noEmit -p packages/agents-md-core/tsconfig.json && tsgo --noEmit -p packages/ast-grep-core/tsconfig.json && tsgo --noEmit -p packages/ulw-host-contract/tsconfig.json && tsgo --noEmit -p packages/ulw-intent/tsconfig.json && tsgo --noEmit -p packages/ulw-loop-state/tsconfig.json && tsgo --noEmit -p packages/ulw-kernel/tsconfig.json"
+  },
+  "dependencies": {
+    "@ast-grep/cli": "^0.42.2",
+    "@ast-grep/napi": "^0.42.2",
+    "@clack/prompts": "^1.4.0",
+    "@code-yeongyu/comment-checker": "^0.8.0",
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "commander": "^14.0.3",
+    "detect-libc": "^2.1.2",
+    "diff": "^9.0.0",
+    "effect": "4.0.0-beta.65",
+    "js-yaml": "^4.1.1",
+    "jsonc-parser": "^3.3.1",
+    "picocolors": "^1.1.1",
+    "picomatch": "^4.0.4",
+    "posthog-node": "^5.34.3",
+    "vscode-jsonrpc": "^8.2.1"
+  },
+  "devDependencies": {
+    "@oh-my-opencode/agents-md-core": "workspace:*",
+    "@oh-my-opencode/ast-grep-core": "workspace:*",
+    "@oh-my-opencode/boulder-state": "workspace:*",
+    "@oh-my-opencode/comment-checker-core": "workspace:*",
+    "@oh-my-opencode/model-core": "workspace:*",
+    "@oh-my-opencode/rules-engine": "workspace:*",
+    "@oh-my-opencode/ulw-host-contract": "workspace:*",
+    "@oh-my-opencode/ulw-intent": "workspace:*",
+    "@oh-my-opencode/ulw-loop-state": "workspace:*",
+    "@oh-my-opencode/ulw-kernel": "workspace:*",
+    "@oh-my-opencode/utils": "workspace:*",
+    "@typescript/native-preview": "7.0.0-dev.20260518.1",
+    "@types/js-yaml": "^4.0.9",
+    "@types/picomatch": "^4.0.3",
+    "bun-types": "1.3.14",
+    "typescript": "^6.0.3",
+    "zod": "^4.4.3"
+  },
+  "trustedDependencies": [
+    "@ast-grep/cli",
+    "@ast-grep/napi",
+    "@code-yeongyu/comment-checker"
+  ]
+}
