@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
+
+    <!-- NuGet tool packaging -->
+    <PackageId>Omodot.CodexMcpBridge</PackageId>
+    <Version>0.1.0</Version>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>omodot</ToolCommandName>
+    <Description>omodot MCP stdio bridge for Codex CLI plugin integration</Description>
+    <Authors>Lina Lab</Authors>
+    <PackageType>DotnetTool</PackageType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Omodot.CodexAdapter\Omodot.CodexAdapter.csproj" />
+    <ProjectReference Include="..\Omodot.UlwHostContract\Omodot.UlwHostContract.csproj" />
+  </ItemGroup>
+
+</Project>

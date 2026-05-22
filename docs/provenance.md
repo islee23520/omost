@@ -12,27 +12,26 @@ milestone for a standalone ULW extraction.
 ## Target
 
 - Path: this repository
-- Initial state: empty git repository with `.git/` and `.omo/` runtime state only
+- Current state: `omodot/` as sole core tree, TypeScript runtime surfaces removed
 
-## Imported Foundation
+## Evolution
 
-- Root package and TypeScript test scaffolding
-- `bun.lock`
-- `bunfig.toml`
-- Existing pure core packages:
-  - `packages/utils`
-  - `packages/model-core`
-  - `packages/rules-engine`
-  - `packages/agents-md-core`
-  - `packages/ast-grep-core`
-  - `packages/comment-checker-core`
-  - `packages/boulder-state`
+1. **Initial import**: TypeScript packages under `packages/*` with `omots/` toolkit
+2. **Conversion**: All 27 TypeScript packages converted to .NET under `omodot/src/`
+3. **Consolidation**: TypeScript runtime surfaces (`omots/`, `packages/`, `hosts/`) removed in one-shot cutover
+4. **Codex integration**: `Omodot.CodexMcpBridge` delivered as MCP-compatible tool server
+
+## Current Layout
+
+- `omodot/` — sole core tree (59 .NET projects, 27 packages)
+- `docs/` — architecture and protocol documentation
+- `protocol-fixtures/` — golden transcripts and conformance fixtures
 
 ## Explicitly Excluded
 
 - OpenCode plugin adapter runtime from `src/`
 - Generated `dist/`
 - `node_modules/`
-- platform binary packages
-- marketing web app
-- source runtime state from `.omo/`
+- Platform binary packages
+- Marketing web app
+- Source runtime state from `.omo/`

@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="Omodot.AstGrepMcp.Tests" />
+    <ProjectReference Include="..\Omodot.AstGrep\Omodot.AstGrep.csproj" />
+  </ItemGroup>
+</Project>
