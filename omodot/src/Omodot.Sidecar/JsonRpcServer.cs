@@ -1,5 +1,6 @@
 using System.Text.Json;
 
+using Omodot.Protocol.Execution;
 using Omodot.Protocol.JsonRpc;
 using Omodot.Protocol.Methods;
 using Omodot.Protocol.Notifications;
@@ -32,6 +33,7 @@ public sealed class JsonRpcServer : INotificationEmitter, IAsyncDisposable
         var progressEmitter = new ProgressEmitter(this);
         var resultEmitter = new ResultEmitter(this);
         var errorEmitter = new ErrorEmitter(this);
+        var runExecutor = new ProtocolConformanceExecutor(serverState, progressEmitter, resultEmitter, errorEmitter);
 
         var initializeHandler = new InitializeHandler(
             OmoProtocolInfo.ProtocolVersion,
@@ -42,10 +44,10 @@ public sealed class JsonRpcServer : INotificationEmitter, IAsyncDisposable
         var sessionStartHandler = new SessionStartHandler(serverState);
         _methodHandlers[sessionStartHandler.MethodName] = sessionStartHandler;
 
-        var runDispatchHandler = new RunDispatchHandler(serverState, progressEmitter, resultEmitter, errorEmitter);
+        var runDispatchHandler = new RunDispatchHandler(runExecutor);
         _methodHandlers[runDispatchHandler.MethodName] = runDispatchHandler;
 
-        var runCancelHandler = new RunCancelHandler(serverState);
+        var runCancelHandler = new RunCancelHandler(runExecutor);
         _methodHandlers[runCancelHandler.MethodName] = runCancelHandler;
     }
 

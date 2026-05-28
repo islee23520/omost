@@ -1,17 +1,16 @@
-using Omodot.Protocol.Notifications;
+using Omodot.Protocol.Execution;
 using Omodot.Protocol.Types;
 
 namespace Omodot.Protocol.Methods;
 
 public sealed class RunCancelHandler : MethodHandlerBase<RunCancelRequestParams, RunCancelResult>
 {
-    private readonly OmodotServerState _serverState;
+    private readonly IOmoRunExecutor _runExecutor;
 
-    public RunCancelHandler(
-        OmodotServerState serverState)
+    public RunCancelHandler(IOmoRunExecutor runExecutor)
         : base(OmoMethodNames.RunCancel)
     {
-        _serverState = serverState;
+        _runExecutor = runExecutor;
     }
 
     protected override void Validate(RunCancelRequestParams parameters)
@@ -19,29 +18,16 @@ public sealed class RunCancelHandler : MethodHandlerBase<RunCancelRequestParams,
         RequestValidator.RequireNonEmptyString(parameters.RunId, "runId");
     }
 
-    protected override ValueTask<RunCancelResult> HandleTypedAsync(
+    protected override async ValueTask<RunCancelResult> HandleTypedAsync(
         RunCancelRequestParams parameters,
         CancellationToken cancellationToken)
     {
-        cancellationToken.ThrowIfCancellationRequested();
+        var result = await _runExecutor.CancelAsync(parameters.RunId, parameters.Reason, cancellationToken).ConfigureAwait(false);
 
-        if (_serverState.TryGetRun(parameters.RunId, out var runRecord) &&
-            runRecord is not null &&
-            OmoRunStatusValues.IsTerminal(runRecord.Status))
+        return new RunCancelResult
         {
-            return ValueTask.FromResult(new RunCancelResult
-            {
-                RunId = parameters.RunId,
-                Status = runRecord.Status,
-            });
-        }
-
-        _serverState.TryCancelRun(parameters.RunId, parameters.Reason, out _);
-
-        return ValueTask.FromResult(new RunCancelResult
-        {
-            RunId = parameters.RunId,
-            Status = OmoRunStatusValues.Cancelled,
-        });
+            RunId = result.RunId,
+            Status = result.Status,
+        };
     }
 }

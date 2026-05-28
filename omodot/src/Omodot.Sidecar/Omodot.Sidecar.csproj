@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Omodot.Protocol\Omodot.Protocol.csproj" />
+    <ProjectReference Include="..\Omodot.UlwHostContract\Omodot.UlwHostContract.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
