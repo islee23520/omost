@@ -49,3 +49,23 @@ compatibility.
 - Tests use shell scripts as mock Codex processes; no network access needed.
 - Adding a new transport (e.g., HTTP long-poll) requires a separate adapter
   package, not changes to this one.
+
+## Boundary note (Revision 2)
+
+This ADR is a transport decision for the Codex edge adapter. PRD Revision 2 also clarifies the boundary narrative:
+
+- `omodot` is a **modular .NET Agent OS SDK**.
+- Codex is the **first reference host / first reference adapter**, not the product boundary.
+- `Omodot.StandaloneRuntime` is a reference composition root, not a mandatory architecture.
+
+Dependency direction reminder:
+
+```text
+Contracts -> Pure capability packages -> Runtime orchestration -> Composition SDK -> Host adapters -> Distribution
+```
+
+Forbidden direction:
+
+```text
+Core/capability/runtime -> adapters
+```

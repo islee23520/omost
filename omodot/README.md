@@ -1,6 +1,12 @@
 # omodot
 
-`omodot` is the .NET Core OMO implementation toolkit — the sole core tree for this repository.
+`omodot` is a **modular .NET Agent OS SDK**.
+
+- **OMO** is the source architecture + first inspiration set (ideas, naming, patterns) — not a boundary you must preserve.
+- **Codex** is the **first reference host / first reference adapter**, not the product boundary.
+- `Omodot.StandaloneRuntime` is a **reference composition root** (an example wiring), not the mandatory architecture.
+
+This repository’s docs follow PRD Revision 2: SDK-first, adapters at the edge, and explicit dependency direction.
 
 ## Layout
 
@@ -51,3 +57,24 @@ Codex plugin packaging is supported through manifests and MCP server declaration
 - All projects target `net10.0` with `Nullable=enable`, `ImplicitUsings=enable`, `TreatWarningsAsErrors=true`.
 - The solution is self-contained with zero external references outside the `omodot/` tree.
 - The protocol layer stays runtime-neutral and depends only on the frozen docs plus local .NET code.
+
+## Architecture boundary (Revision 2)
+
+### Layering and dependency direction
+
+Allowed direction:
+
+```text
+Contracts -> Pure capability packages -> Runtime orchestration -> Composition SDK -> Host adapters -> Distribution
+```
+
+Forbidden direction:
+
+```text
+Core/capability/runtime -> adapters
+```
+
+### Boundary reminders
+
+- `Omodot.UlwHostContract` is the host seam and must remain adapter-neutral.
+- `Omodot.CodexAdapter` / `Omodot.CodexMcpBridge` are edge adapters/distribution; core packages must not depend on them.

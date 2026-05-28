@@ -11,6 +11,29 @@
 
 This document describes the rollout phases and ownership map for the OMO platform. The original five-phase plan targeting dual TypeScript/.NET implementations has been superseded by a consolidation around `omodot/` as the sole core tree.
 
+## Revision 2 narrative (SDK-first)
+
+PRD Revision 2 explicitly sets the product boundary and story:
+
+- `omodot` is a **modular .NET Agent OS SDK**.
+- OMO is the upstream source architecture + first inspiration set.
+- Codex is the **first reference host / first reference adapter**, not the product boundary.
+- `Omodot.StandaloneRuntime` is a reference composition root (example wiring), not a mandatory architecture.
+
+### Dependency direction
+
+Allowed direction:
+
+```text
+Contracts -> Pure capability packages -> Runtime orchestration -> Composition SDK -> Host adapters -> Distribution
+```
+
+Forbidden direction:
+
+```text
+Core/capability/runtime -> adapters
+```
+
 ---
 
 ## Phase History
@@ -70,6 +93,24 @@ Codex integration is **delivered** via `Omodot.CodexMcpBridge`:
 - Versioning policy: `docs/protocol/omo-protocol-versioning.md`
 - Compatibility policy: `docs/architecture/omo-compatibility-policy.md`
 - Codex adapter transport ADR: `omodot/docs/ADR-001-codex-adapter-transport.md`
+
+## OMO inheritance ledger (PRD §17)
+
+Every inherited OMO idea must be tracked:
+
+| OMO idea | omodot package/preset | Status | Adapter-bound exclusions |
+|---|---|---|---|
+| ULW loop | `Omodot.UlwKernel`, `Omodot.UlwLoopState` | experimental public | host-specific prompt injection |
+| Host seam | `Omodot.UlwHostContract` | stable public v0 candidate | OpenCode session APIs |
+| Skills | `Omodot.SkillsCore`, `Omodot.SkillMcp` | experimental public | host skill loading lifecycle |
+| Hooks | `Omodot.Hooks` | experimental public | OpenCode hook registration |
+| HashLine | `Omodot.HashLine` | stable public v0 candidate | host read-tool injection |
+| Rules/AGENTS.md | `Omodot.RulesEngine`, `Omodot.AgentsMd` | stable public v0 candidate | host context injection |
+| Team mode | `Omodot.TeamModeCore`, `Omodot.TmuxSubagent` | experimental public | host task spawning/UI |
+| Background agents | `Omodot.BackgroundAgent` | experimental public | host-specific process/session management |
+| MCP bridge ideas | `Omodot.SkillMcp`, `Omodot.AstGrepMcp`, `Omodot.CodexMcpBridge` | mixed | host MCP lifecycle/OAuth |
+| Session memory/search | `Omodot.SessionManager` | experimental public | host storage/session APIs |
+| OMO presets | `Omodot.AgentOs.OmoPreset` future | experimental preset | should remain replaceable |
 
 ---
 

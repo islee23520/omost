@@ -9,9 +9,73 @@
 
 All 27 original TypeScript packages under `packages/*` have been converted to .NET and consolidated under `omodot/src/`. The TypeScript runtime surfaces have been removed in a one-shot cutover.
 
+## Revision 2 boundary narrative (SDK-first)
+
+PRD Revision 2 clarifies the boundary story:
+
+- `omodot` is a **modular .NET Agent OS SDK**.
+- OMO is the source architecture and first inspiration set (ideas/patterns), not a required product boundary.
+- Codex is the **first reference host / first reference adapter**, not the product boundary.
+- `Omodot.StandaloneRuntime` is a reference composition root (example wiring), not a mandatory architecture.
+
+### Dependency direction
+
+Allowed direction:
+
+```text
+Contracts -> Pure capability packages -> Runtime orchestration -> Composition SDK -> Host adapters -> Distribution
+```
+
+Forbidden direction:
+
+```text
+Core/capability/runtime -> adapters
+```
+
+> Note: The “Composition SDK” (builder + presets) is an architectural layer even if the package is not fully materialized yet.
+
 ## Current Package Layout
 
 All packages live under `omodot/src/` as .NET projects targeting `net10.0`.
+
+## Required package boundary matrix (PRD §12)
+
+Before implementation handoff, every `omodot/src/*` project must be classified.
+
+| Package | Status | Boundary rule |
+|---|---|---|
+| `Omodot.UlwHostContract` | stable public v0 candidate | may not depend on runtime/adapters |
+| `Omodot.Protocol` | stable public v0 candidate | protocol DTO/framing only; no host policy |
+| `Omodot.HashLine` | stable public v0 candidate | pure capability package |
+| `Omodot.RulesEngine` | stable public v0 candidate | pure capability package |
+| `Omodot.AgentsMd` | stable public v0 candidate | may depend on rules/core utilities only |
+| `Omodot.ModelCore` | experimental public | model/provider policy evolves quickly |
+| `Omodot.SkillMcp` | experimental public | skill-embedded MCP parsing, no host lifecycle ownership |
+| `Omodot.SkillsCore` | experimental public | OMO-inspired defaults; should be replaceable |
+| `Omodot.UlwKernel` | experimental public | runtime policy; depends on contracts/state |
+| `Omodot.UlwLoopState` | stable/experimental public | state abstractions and stores |
+| `Omodot.Hooks` | experimental public | OMO-inspired hook catalog; no host-specific APIs |
+| `Omodot.TeamModeCore` | experimental public | portable team data/model only |
+| `Omodot.Tmux` | experimental public | local terminal capability, no host ownership |
+| `Omodot.TmuxSubagent` | experimental public | portable subagent decision logic |
+| `Omodot.SearchTools` | experimental public | grep/glob process helpers |
+| `Omodot.AstGrep` | experimental public | ast-grep core helpers |
+| `Omodot.AstGrepMcp` | adapter/tooling | MCP wrapper over ast-grep core |
+| `Omodot.LspTools` | adapter/tooling | LSP/MCP-oriented tooling |
+| `Omodot.CommandExecutor` | experimental/internal | command execution helpers; security review before stable |
+| `Omodot.CommentChecker` | experimental public | portable quality gate |
+| `Omodot.GitWorktree` | experimental public | git porcelain/diff helpers |
+| `Omodot.SessionManager` | experimental public | session formatting/search |
+| `Omodot.SlashCommand` | experimental public | host-neutral command discovery/conversion only |
+| `Omodot.Utils` | internal or stable primitives | split stable primitives from kitchen-sink utilities if needed |
+| `Omodot.StandaloneRuntime` | reference composition | not the SDK product boundary |
+| `Omodot.CodexAdapter` | host adapter | may depend on core contracts, not vice versa |
+| `Omodot.CodexMcpBridge` | host adapter/distribution | Codex MCP bridge; no core dependency reversal |
+| `Omodot.CodexAdapter.Demo` | demo | not public SDK surface |
+| `Omodot.Sidecar` | distribution/tooling | protocol process host; uses injectable executor seam |
+| `Omodot.BoulderState` | experimental public | workflow state; package status depends on API review |
+| `Omodot.BackgroundAgent` | experimental public | portable lifecycle only; host spawning remains adapter-owned |
+| `Omodot.UlwIntent` | experimental public | keyword/intent policy; replaceable |
 
 ### Core Packages (formerly `shared-sdk`)
 
