@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="../Omodot.AgentOs/Omodot.AgentOs.csproj" />
     <ProjectReference Include="../Omodot.UlwHostContract/Omodot.UlwHostContract.csproj" />
   </ItemGroup>
 
