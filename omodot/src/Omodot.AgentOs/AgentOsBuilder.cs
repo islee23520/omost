@@ -1,5 +1,8 @@
 namespace Omodot.AgentOs;
 
+/// <summary>
+/// Builder for creating <see cref="AgentOs"/> instances.
+/// </summary>
 public sealed class AgentOsBuilder
 {
     private readonly Dictionary<string, IAgentOsModule> modules = new(StringComparer.Ordinal);
@@ -8,6 +11,11 @@ public sealed class AgentOsBuilder
     private readonly List<IWorkflowDefinition> workflows = [];
     private string? selectedWorkflowId;
 
+    /// <summary>
+    /// Adds a module to the Agent OS.
+    /// </summary>
+    /// <param name="module">The module to add.</param>
+    /// <returns>The builder instance.</returns>
     public AgentOsBuilder AddModule(IAgentOsModule module)
     {
         ArgumentNullException.ThrowIfNull(module);
@@ -22,6 +30,12 @@ public sealed class AgentOsBuilder
         return this;
     }
 
+    /// <summary>
+    /// Replaces an existing module with a new one.
+    /// </summary>
+    /// <param name="moduleId">The identifier of the module to replace.</param>
+    /// <param name="replacement">The replacement module.</param>
+    /// <returns>The builder instance.</returns>
     public AgentOsBuilder ReplaceModule(string moduleId, IAgentOsModule replacement)
     {
         ValidateId(moduleId, nameof(moduleId));
@@ -43,6 +57,11 @@ public sealed class AgentOsBuilder
         return this;
     }
 
+    /// <summary>
+    /// Sets the host adapter for the Agent OS.
+    /// </summary>
+    /// <param name="host">The host adapter to use.</param>
+    /// <returns>The builder instance.</returns>
     public AgentOsBuilder UseHost(IHostAdapter host)
     {
         ArgumentNullException.ThrowIfNull(host);
@@ -51,6 +70,11 @@ public sealed class AgentOsBuilder
         return this;
     }
 
+    /// <summary>
+    /// Adds an agent definition to the Agent OS.
+    /// </summary>
+    /// <param name="agent">The agent definition to add.</param>
+    /// <returns>The builder instance.</returns>
     public AgentOsBuilder AddAgent(IAgentDefinition agent)
     {
         ArgumentNullException.ThrowIfNull(agent);
@@ -59,6 +83,11 @@ public sealed class AgentOsBuilder
         return this;
     }
 
+    /// <summary>
+    /// Adds a workflow definition to the Agent OS.
+    /// </summary>
+    /// <param name="workflow">The workflow definition to add.</param>
+    /// <returns>The builder instance.</returns>
     public AgentOsBuilder AddWorkflow(IWorkflowDefinition workflow)
     {
         ArgumentNullException.ThrowIfNull(workflow);
@@ -67,6 +96,11 @@ public sealed class AgentOsBuilder
         return this;
     }
 
+    /// <summary>
+    /// Selects a workflow to be used by the Agent OS.
+    /// </summary>
+    /// <param name="workflowId">The identifier of the workflow to use.</param>
+    /// <returns>The builder instance.</returns>
     public AgentOsBuilder UseWorkflow(string workflowId)
     {
         ValidateId(workflowId, nameof(workflowId));
@@ -74,8 +108,16 @@ public sealed class AgentOsBuilder
         return this;
     }
 
+    /// <summary>
+    /// Builds a runnable <see cref="AgentOs"/> instance. Requires a host adapter.
+    /// </summary>
+    /// <returns>The built Agent OS instance.</returns>
     public AgentOs Build() => BuildCore(requireHost: true);
 
+    /// <summary>
+    /// Builds a design-time <see cref="AgentOs"/> instance. Does not require a host adapter.
+    /// </summary>
+    /// <returns>The built Agent OS instance.</returns>
     public AgentOs BuildDesignTime() => BuildCore(requireHost: false);
 
     private AgentOs BuildCore(bool requireHost)

@@ -34,7 +34,7 @@ public sealed class CodexMcpToolServer : IDisposable
 
         sessionId ??= Guid.NewGuid().ToString("N")[..16];
 
-        var receipt = await _host.DispatchPromptAsync(new UlwPromptRequest(prompt, sessionId));
+        var receipt = await _host.DispatchPromptAsync(new UlwPromptRequest(sessionId, prompt));
 
         return new CodexMcpToolResult(
             ToolName: "codex_dispatch",

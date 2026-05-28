@@ -72,6 +72,7 @@ Before implementation handoff, every `omodot/src/*` project must be classified.
 | `Omodot.CodexAdapter` | host adapter | may depend on core contracts, not vice versa |
 | `Omodot.CodexMcpBridge` | host adapter/distribution | Codex MCP bridge; no core dependency reversal |
 | `Omodot.CodexAdapter.Demo` | demo | not public SDK surface |
+| `Omodot.AgentOs` | experimental composition SDK | host-neutral builder, module system, host adapter registry; no adapter dependencies |
 | `Omodot.Sidecar` | distribution/tooling | protocol process host; uses injectable executor seam |
 | `Omodot.BoulderState` | experimental public | workflow state; package status depends on API review |
 | `Omodot.BackgroundAgent` | experimental public | portable lifecycle only; host spawning remains adapter-owned |
