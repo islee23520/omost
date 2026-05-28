@@ -8,7 +8,9 @@ namespace Omodot.CodexAdapter;
 /// </summary>
 public sealed class CodexReferenceHostAdapter : IHostAdapter
 {
+    /// <inheritdoc />
     public string Id => "codex-reference-host";
 
+    /// <inheritdoc />
     public string? DisplayName => "Codex Reference Host";
 }

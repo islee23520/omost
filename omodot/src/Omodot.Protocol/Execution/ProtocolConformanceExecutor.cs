@@ -7,6 +7,9 @@ using Omodot.Protocol.Types;
 
 namespace Omodot.Protocol.Execution;
 
+/// <summary>
+/// Implementation of <see cref="IOmoRunExecutor"/> that ensures protocol conformance.
+/// </summary>
 public sealed class ProtocolConformanceExecutor : IOmoRunExecutor
 {
     private readonly ErrorEmitter _errorEmitter;
@@ -14,6 +17,13 @@ public sealed class ProtocolConformanceExecutor : IOmoRunExecutor
     private readonly ResultEmitter _resultEmitter;
     private readonly OmodotServerState _serverState;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ProtocolConformanceExecutor"/> class.
+    /// </summary>
+    /// <param name="serverState">The server state.</param>
+    /// <param name="progressEmitter">The progress emitter.</param>
+    /// <param name="resultEmitter">The result emitter.</param>
+    /// <param name="errorEmitter">The error emitter.</param>
     public ProtocolConformanceExecutor(
         OmodotServerState serverState,
         ProgressEmitter progressEmitter,
@@ -26,6 +36,7 @@ public sealed class ProtocolConformanceExecutor : IOmoRunExecutor
         _errorEmitter = errorEmitter;
     }
 
+    /// <inheritdoc />
     public Task<OmoRunAccepted> DispatchAsync(RunDispatchRequestParams request, CancellationToken ct)
     {
         ct.ThrowIfCancellationRequested();
@@ -45,6 +56,7 @@ public sealed class ProtocolConformanceExecutor : IOmoRunExecutor
         });
     }
 
+    /// <inheritdoc />
     public Task<OmoCancelResult> CancelAsync(string runId, string? reason, CancellationToken ct)
     {
         ct.ThrowIfCancellationRequested();

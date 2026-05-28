@@ -12,6 +12,10 @@ public sealed class CodexMcpToolServer : IDisposable
     private readonly CodexUlwHost _host;
     private readonly Dictionary<string, string> _toolDescriptions;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CodexMcpToolServer"/> class.
+    /// </summary>
+    /// <param name="config">The resolved Codex configuration.</param>
     public CodexMcpToolServer(CodexResolvedConfig config)
     {
         ArgumentNullException.ThrowIfNull(config);
@@ -22,12 +26,17 @@ public sealed class CodexMcpToolServer : IDisposable
     /// <summary>
     /// Returns the list of available MCP tools.
     /// </summary>
+    /// <returns>A dictionary of tool names and their descriptions.</returns>
     public IReadOnlyDictionary<string, string> ListTools() => _toolDescriptions;
 
     /// <summary>
     /// Dispatches a prompt to Codex via the CodexAdapter.
     /// MCP tool: codex_dispatch
     /// </summary>
+    /// <param name="prompt">The prompt to dispatch.</param>
+    /// <param name="sessionId">The optional session identifier.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>A task representing the asynchronous operation, containing the tool result.</returns>
     public async Task<CodexMcpToolResult> DispatchAsync(string prompt, string? sessionId = null, CancellationToken cancellationToken = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(prompt);
@@ -48,6 +57,9 @@ public sealed class CodexMcpToolServer : IDisposable
     /// Reads the current status of a Codex session.
     /// MCP tool: codex_read_status
     /// </summary>
+    /// <param name="sessionId">The session identifier.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>A task representing the asynchronous operation, containing the status result.</returns>
     public Task<CodexMcpStatusResult> ReadStatusAsync(string sessionId, CancellationToken cancellationToken = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(sessionId);
@@ -64,6 +76,9 @@ public sealed class CodexMcpToolServer : IDisposable
     /// Reads messages from a Codex session.
     /// MCP tool: codex_read_messages
     /// </summary>
+    /// <param name="sessionId">The session identifier.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>A task representing the asynchronous operation, containing the messages result.</returns>
     public async Task<CodexMcpMessagesResult> ReadMessagesAsync(string sessionId, CancellationToken cancellationToken = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(sessionId);
@@ -79,6 +94,9 @@ public sealed class CodexMcpToolServer : IDisposable
     /// Aborts the current Codex operation.
     /// MCP tool: codex_abort
     /// </summary>
+    /// <param name="sessionId">The session identifier.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>A task representing the asynchronous operation, containing the tool result.</returns>
     public Task<CodexMcpToolResult> AbortAsync(string sessionId, CancellationToken cancellationToken = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(sessionId);
@@ -95,8 +113,11 @@ public sealed class CodexMcpToolServer : IDisposable
     /// <summary>
     /// Registers an event listener for Codex session events.
     /// </summary>
+    /// <param name="listener">The event listener to register.</param>
+    /// <returns>An action that unregisters the listener when invoked.</returns>
     public Action RegisterEventListener(Action<UlwSessionEvent> listener) => _host.OnEvent(listener);
 
+    /// <inheritdoc />
     public void Dispose() => _host.Dispose();
 
     private static Dictionary<string, string> InitializeToolDescriptions() => new()
@@ -111,6 +132,11 @@ public sealed class CodexMcpToolServer : IDisposable
 /// <summary>
 /// Result from an MCP tool invocation.
 /// </summary>
+/// <param name="ToolName">The name of the tool.</param>
+/// <param name="Success">A value indicating whether the invocation was successful.</param>
+/// <param name="SessionId">The session identifier.</param>
+/// <param name="DispatchId">The dispatch identifier.</param>
+/// <param name="Error">The error message, if any.</param>
 public sealed record CodexMcpToolResult(
     string ToolName,
     bool Success,
@@ -121,6 +147,9 @@ public sealed record CodexMcpToolResult(
 /// <summary>
 /// Status result from codex_read_status.
 /// </summary>
+/// <param name="ToolName">The name of the tool.</param>
+/// <param name="SessionId">The session identifier.</param>
+/// <param name="Status">The current status.</param>
 public sealed record CodexMcpStatusResult(
     string ToolName,
     string SessionId,
@@ -129,6 +158,9 @@ public sealed record CodexMcpStatusResult(
 /// <summary>
 /// Messages result from codex_read_messages.
 /// </summary>
+/// <param name="ToolName">The name of the tool.</param>
+/// <param name="SessionId">The session identifier.</param>
+/// <param name="Messages">The list of messages.</param>
 public sealed record CodexMcpMessagesResult(
     string ToolName,
     string SessionId,
@@ -137,4 +169,6 @@ public sealed record CodexMcpMessagesResult(
 /// <summary>
 /// Single message in an MCP messages result.
 /// </summary>
+/// <param name="Role">The role of the message sender.</param>
+/// <param name="Content">The content of the message.</param>
 public sealed record CodexMcpMessage(string Role, string Content);
