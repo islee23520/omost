@@ -170,6 +170,23 @@ public sealed class AgentOsBuilderTests
         Assert.Contains("Ambiguous", error.Message, StringComparison.OrdinalIgnoreCase);
     }
 
+    [Fact]
+    public void ReadmeSnippets_Compile()
+    {
+        var designTime = new AgentOsBuilder()
+            .AddModule(Module("kernel"))
+            .BuildDesignTime();
+
+        Assert.Null(designTime.Host);
+
+        var withHost = new AgentOsBuilder()
+            .AddModule(Module("kernel"))
+            .UseHost(Host("custom-host"))
+            .Build();
+
+        Assert.NotNull(withHost.Host);
+    }
+
     private static TestModule Module(
         string id,
         string? version = null,

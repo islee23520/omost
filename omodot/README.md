@@ -78,3 +78,68 @@ Core/capability/runtime -> adapters
 
 - `Omodot.UlwHostContract` is the host seam and must remain adapter-neutral.
 - `Omodot.CodexAdapter` / `Omodot.CodexMcpBridge` are edge adapters/distribution; core packages must not depend on them.
+
+## Agent OS Builder (Experimental)
+
+The `AgentOsBuilder` API is Phase A and experimental. It is not a stable public NuGet v0 surface, and it can change without notice.
+
+The snippets below are minimal, design oriented examples. They use simplified placeholder types (`MyModule`, `MyAgent`, `MyWorkflow`). For compiled, real patterns, see `tests/Omodot.AgentOs.Tests/AgentOsBuilderTests.cs`.
+
+### Design-time composition (no host)
+
+Example (conceptual):
+
+```csharp
+using Omodot.AgentOs;
+
+var agentOs = new AgentOsBuilder()
+    .AddModule(new MyModule("kernel"))
+    .BuildDesignTime();
+```
+
+### Codex-backed composition (with Codex adapter extension)
+
+Example (conceptual):
+
+```csharp
+using Omodot.AgentOs;
+using Omodot.CodexAdapter;
+
+var agentOs = new AgentOsBuilder()
+    .AddModule(new MyModule("kernel"))
+    .UseCodexReferenceHost()
+    .Build();
+```
+
+### Custom module registration
+
+Example (conceptual):
+
+```csharp
+public sealed class MyModule : IAgentOsModule
+{
+    public string Id => "my-module";
+    public string? Version => "1.0.0";
+    public IReadOnlyList<string> Requires => [];
+    public IReadOnlyList<string> ConflictsWith => [];
+    public bool IsPreset => false;
+}
+```
+
+### Agent and workflow registration
+
+Example (conceptual):
+
+```csharp
+var agentOs = new AgentOsBuilder()
+    .AddModule(new MyModule("core"))
+    .AddAgent(new MyAgent("planner", "Planner"))
+    .AddWorkflow(new MyWorkflow("main", "Main Workflow", isDefault: true))
+    .UseCodexReferenceHost()
+    .Build();
+```
+
+### Notes
+
+- Preset modules (`IsPreset = true`) cannot be silently overridden. Use `ReplaceModule()` for explicit replacement.
+- `UseCodexReferenceHost()` lives in `Omodot.CodexAdapter`, not in the host neutral SDK. Generic hosts should call `UseHost(IHostAdapter)`.
