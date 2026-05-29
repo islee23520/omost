@@ -33,6 +33,25 @@ public sealed record AgentExecutionSnapshot(
     IReadOnlyList<AgentReviewSignal> Reviews,
     DecisionVerdict Decision);
 
+public sealed record AgentExecutionDispatchRequest(
+    string SessionId,
+    string RunId,
+    string TaskId,
+    string Role,
+    bool Hidden,
+    string Message,
+    IReadOnlyList<SharedSkillReference> SharedSkills,
+    IReadOnlyList<LazyCapabilityRequest> LazyCapabilities,
+    string? ContinuationToken = null);
+
+public sealed record AgentExecutionDispatchReceipt(
+    bool Accepted,
+    string SessionId,
+    string DispatchId,
+    string TaskId,
+    IReadOnlyList<string> ArtifactReferences,
+    string? ContinuationToken = null);
+
 public static class AgentExecutionTransitions
 {
     public static AgentExecutionSnapshot StartTask(AgentExecutionSnapshot snapshot, string taskId)

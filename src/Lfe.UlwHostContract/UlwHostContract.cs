@@ -30,7 +30,8 @@ public sealed record UlwPromptReceipt(
     string DispatchId,
     string? ResponseId = null,
     string? ContinuationToken = null,
-    bool? AgenticStatePreserved = null);
+    bool? AgenticStatePreserved = null,
+    IReadOnlyList<string>? ArtifactReferences = null);
 
 public sealed record UlwMessage(string Role, string Text);
 
