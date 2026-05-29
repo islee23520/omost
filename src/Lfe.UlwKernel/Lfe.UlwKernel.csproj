@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\Lfe.UlwHostContract\Lfe.UlwHostContract.csproj" />
+    <ProjectReference Include="..\Lfe.UlwIntent\Lfe.UlwIntent.csproj" />
+    <ProjectReference Include="..\Lfe.UlwLoopState\Lfe.UlwLoopState.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+
+</Project>

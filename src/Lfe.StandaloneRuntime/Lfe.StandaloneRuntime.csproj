@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Lfe.Hooks\Lfe.Hooks.csproj" />
+    <ProjectReference Include="..\Lfe.SkillsCore\Lfe.SkillsCore.csproj" />
+    <ProjectReference Include="..\Lfe.SessionManager\Lfe.SessionManager.csproj" />
+    <ProjectReference Include="..\Lfe.UlwHostContract\Lfe.UlwHostContract.csproj" />
+    <ProjectReference Include="..\Lfe.UlwKernel\Lfe.UlwKernel.csproj" />
+    <ProjectReference Include="..\Lfe.UlwLoopState\Lfe.UlwLoopState.csproj" />
+    <ProjectReference Include="..\Lfe.SearchTools\Lfe.SearchTools.csproj" />
+    <ProjectReference Include="..\Lfe.SkillMcp\Lfe.SkillMcp.csproj" />
+    <ProjectReference Include="..\Lfe.SlashCommand\Lfe.SlashCommand.csproj" />
+    <ProjectReference Include="..\Lfe.CodexAdapter\Lfe.CodexAdapter.csproj" />
+  </ItemGroup>
+
+</Project>

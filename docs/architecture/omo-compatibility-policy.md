@@ -9,7 +9,7 @@
 
 ## 1. Purpose
 
-This document defines the exact compatibility surface for Phase 1 and the release gate that `omodot` must satisfy.
+This document defines the exact compatibility surface for Phase 1 and the release gate that `lfe` must satisfy.
 
 Compatibility is NOT defined by "full OMO parity." It is defined by passing a bounded, explicitly enumerated set of capabilities and their shared fixtures.
 
@@ -33,7 +33,7 @@ These six names are the complete and final Phase 1 capability set. Any server th
 
 ## 3. Implementation Conformance
 
-`omodot/` (.NET Core) is the sole implementation of the protocol. Conformance is measured by passing the golden transcript fixtures, not by matching any reference implementation structure.
+`lfe/` (.NET Core) is the sole implementation of the protocol. Conformance is measured by passing the golden transcript fixtures, not by matching any reference implementation structure.
 
 - The implementation is authoritative for Phase 1 conformance.
 - Conformance is measured by passing golden transcripts under `protocol-fixtures/golden/`.
@@ -41,7 +41,7 @@ These six names are the complete and final Phase 1 capability set. Any server th
 
 ### Historical Note
 
-The original policy defined `omots` (TypeScript/Bun) and `omodot` (.NET Core) as peer implementations. The TypeScript implementation was removed in the one-shot cutover. Cross-implementation fixture parity is no longer applicable.
+The original policy defined `omots` (TypeScript/Bun) and `lfe` (.NET Core) as peer implementations. The TypeScript implementation was removed in the one-shot cutover. Cross-implementation fixture parity is no longer applicable.
 
 ---
 
@@ -49,7 +49,7 @@ The original policy defined `omots` (TypeScript/Bun) and `omodot` (.NET Core) as
 
 A protocol release (any version bump) is valid only when the following conditions are met:
 
-1. `omodot` passes the complete set of golden transcripts stored under `protocol-fixtures/golden/`.
+1. `lfe` passes the complete set of golden transcripts stored under `protocol-fixtures/golden/`.
 2. The implementation advertises the correct `protocolVersion` string.
 3. The implementation accepts exactly the correct subset of the six Phase 1 capabilities for that version.
 4. No structural changes to methods, notifications, or error envelopes have occurred outside the rules defined in `docs/protocol/omo-protocol-versioning.md`.
@@ -91,12 +91,12 @@ Phase 2+ cannot break Phase 1 contracts. Any breaking change requires a major pr
 
 ## 7. Codex Integration
 
-Codex integration is delivered via `Omodot.CodexMcpBridge`:
+Codex integration is delivered via `Lfe.CodexMcpBridge`:
 
 - The MCP bridge wraps `CodexUlwHost` with 4 MCP-compatible tools.
 - Codex integration is NOT part of Phase 1 protocol conformance.
 - Codex plugin packaging is manifest/config-driven; direct native .NET assembly/plugin loading is unsupported by Codex CLI.
-- The supported path is Codex plugin package → `.mcp.json` → `Omodot.CodexMcpBridge` → `Omodot.CodexAdapter`.
+- The supported path is Codex plugin package → `.mcp.json` → `Lfe.CodexMcpBridge` → `Lfe.CodexAdapter`.
 
 ---
 
@@ -111,8 +111,8 @@ grep -n "Phase 1 capabilities" docs/architecture/omo-compatibility-policy.md
 Expected output lists exactly the six names above.
 
 ```bash
-dotnet build omodot/Omodot.sln
-dotnet test omodot/Omodot.sln
+dotnet build lfe/Lfe.sln
+dotnet test lfe/Lfe.sln
 ```
 
 Both commands must exit 0.

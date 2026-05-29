@@ -14,7 +14,7 @@ The OMO protocol follows semantic versioning: `major.minor.patch`.
 - **Minor** (X.Y.0): Backward-compatible additions.
 - **Patch** (X.Y.Z): No structural changes.
 
-Both `omots` and `omodot` MUST advertise identical protocol versions for a given release. Version negotiation occurs exclusively at `omo.initialize` via `params.protocolVersion`.
+Both `omots` and `lfe` MUST advertise identical protocol versions for a given release. Version negotiation occurs exclusively at `omo.initialize` via `params.protocolVersion`.
 
 ---
 
@@ -34,7 +34,7 @@ A major version bump (e.g., 1.x → 2.x) is REQUIRED when any of the following o
 - Making `prompt` optional in `omo.run.dispatch` when it was previously required.
 - Removing the `phase1.run-cancel` capability contract.
 
-**Consequence:** All peer implementations (`omots`, `omodot`) MUST update simultaneously. Shared fixtures under `protocol-fixtures/golden/` MUST be regenerated for the new major version.
+**Consequence:** All peer implementations (`omots`, `lfe`) MUST update simultaneously. Shared fixtures under `protocol-fixtures/golden/` MUST be regenerated for the new major version.
 
 ---
 
@@ -89,7 +89,7 @@ Version negotiation is performed once per stdio connection via `omo.initialize`:
 
 ## 6. Peer Implementation Rule
 
-`omots` (TypeScript/Bun) and `omodot` (.NET Core) are peer implementations of the same protocol. Neither is a "reference" or "source of truth." Both MUST:
+`omots` (TypeScript/Bun) and `lfe` (.NET Core) are peer implementations of the same protocol. Neither is a "reference" or "source of truth." Both MUST:
 
 - Advertise the same `protocolVersion` for a given release.
 - Accept the same set of capabilities for that version.
@@ -103,7 +103,7 @@ Cross-implementation conformance is defined by fixture parity, not by code-level
 
 A protocol release is valid only when:
 
-- Both `omots` and `omodot` pass the same golden transcripts.
+- Both `omots` and `lfe` pass the same golden transcripts.
 - The advertised `protocolVersion` matches across both implementations.
 - No structural changes exist outside the rules defined above.
 

@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../Lfe.AgentOs/Lfe.AgentOs.csproj" />
+    <ProjectReference Include="../Lfe.UlwHostContract/Lfe.UlwHostContract.csproj" />
+  </ItemGroup>
+
+</Project>

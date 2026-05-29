@@ -12,18 +12,18 @@ milestone for a standalone ULW extraction.
 ## Target
 
 - Path: this repository
-- Current state: `omodot/` as sole core tree, TypeScript runtime surfaces removed
+- Current state: `lfe/` as sole core tree, TypeScript runtime surfaces removed
 
 ## Evolution
 
 1. **Initial import**: TypeScript packages under `packages/*` with `omots/` toolkit
-2. **Conversion**: All 27 TypeScript packages converted to .NET under `omodot/src/`
+2. **Conversion**: All 27 TypeScript packages converted to .NET under `lfe/src/`
 3. **Consolidation**: TypeScript runtime surfaces (`omots/`, `packages/`, `hosts/`) removed in one-shot cutover
-4. **Codex integration**: `Omodot.CodexMcpBridge` delivered as MCP-compatible tool server
+4. **Codex integration**: `Lfe.CodexMcpBridge` delivered as MCP-compatible tool server
 
 ## Current Layout
 
-- `omodot/` — sole core tree (59 .NET projects, 27 packages)
+- `lfe/` — sole core tree (59 .NET projects, 27 packages)
 - `docs/` — architecture and protocol documentation
 - `protocol-fixtures/` — golden transcripts and conformance fixtures
 

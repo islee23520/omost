@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
+
+    <!-- NuGet tool packaging -->
+    <PackageId>Lfe.CodexMcpBridge</PackageId>
+    <Version>0.1.0</Version>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>lfe</ToolCommandName>
+    <Description>lfe MCP stdio bridge for Codex CLI plugin integration</Description>
+    <Authors>Lina Lab</Authors>
+    <PackageType>DotnetTool</PackageType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Lfe.CodexAdapter\Lfe.CodexAdapter.csproj" />
+    <ProjectReference Include="..\Lfe.UlwHostContract\Lfe.UlwHostContract.csproj" />
+  </ItemGroup>
+
+</Project>

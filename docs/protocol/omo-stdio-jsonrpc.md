@@ -17,7 +17,7 @@
 - No network stack required.
 - Simple process lifecycle semantics (parent spawns child, pipes stdin/stdout).
 - Matches existing patterns in LSP (Language Server Protocol) and MCP (Model Context Protocol).
-- Enables cross-runtime interop between `omots` (TypeScript/Bun) and `omodot` (.NET Core) without HTTP/gRPC complexity.
+- Enables cross-runtime interop between `omots` (TypeScript/Bun) and `lfe` (.NET Core) without HTTP/gRPC complexity.
 
 **Out of scope for Phase 1:**
 - HTTP transport (REST, WebSocket, Server-Sent Events).
@@ -130,7 +130,7 @@ Exactly four methods are defined for Phase 1. No additional methods may be added
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `protocolVersion` | string | yes | Server's negotiated protocol version |
-| `implementationName` | string | yes | Implementation name (e.g., `"omots"`, `"omodot"`) |
+| `implementationName` | string | yes | Implementation name (e.g., `"omots"`, `"lfe"`) |
 | `acceptedCapabilities` | string[] | yes | Capabilities the server accepts for this session |
 | `serverMode` | string | yes | `"standalone"` or `"bridge"` |
 
@@ -383,10 +383,10 @@ The following fixture paths are required for conformance testing (all fixtures l
 - `protocol-fixtures/phase1/error.version-mismatch.response.json`
 - `protocol-fixtures/phase1/error.invalid-request.response.json`
 - `protocol-fixtures/golden/omots-phase1-success.json`
-- `protocol-fixtures/golden/omodot-phase1-success.json`
+- `protocol-fixtures/golden/lfe-phase1-success.json`
 - `protocol-fixtures/golden/phase1-cancel.json`
 
-All implementations (`omots`, `omodot`) MUST pass the same fixture suite for a given protocol version.
+All implementations (`omots`, `lfe`) MUST pass the same fixture suite for a given protocol version.
 
 ---
 
