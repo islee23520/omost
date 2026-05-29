@@ -244,9 +244,9 @@ This section accounts for every single non-test file under `src/shared/` in the 
 | `zip-extractor.ts` | Excluded | Runtime-only. Part of unpacking subsystem. |
 | `zauc-mocks-migrate-legacy-plugin/` | Excluded | Test-support fixture directory for legacy plugin migration behavior; not part of standalone runtime surface. |
 
-## Skeptical Verification of Oracle-Named Gaps
+## Detailed Disposition Rationale
 
-To satisfy the skeptical verification requirements of the Oracle review system, the following details prove exactly how each specified gap was resolved.
+The following details explain how specific gaps and exclusions were resolved during the standalone extraction.
 
 ### 1. Backwards Compatibility Configuration Migrations
 * **Files:** `migration/config-migration.ts`, `migration/agent-names.ts`, `migration/hook-names.ts`, `migrate-legacy-config-file.ts`, `migrate-legacy-plugin-entry.ts`, `plugin-entry-migrator.ts`, `migration/`
@@ -256,7 +256,7 @@ To satisfy the skeptical verification requirements of the Oracle review system, 
 ### 2. Live Prompt Ordering and Event Gates
 * **Files:** `prompt-async-gate/*` (including `pending-tool-turn.ts`, `queue.ts`, `reservations.ts`, `session-idle-dispatch.ts`, `timing.ts`, `types.ts`, `prompt-async-gate.ts`)
 * **Disposition:** Adapter-bound.
-* **Explanation:** This subsystem orchestrates queuing and reservation locks for active prompt requests to prevent overlapping outputs in the console UI. It depends entirely on live client context references (`client.session.prompt` and `client.session.promptAsync`). In a headless environment, these gatekeepers are obsolete. These are preserved in the host adapter layer for client-side integration.
+* **Explanation:** This subsystem orchestrates queuing and reservation locks for active prompt requests to prevent overlapping outputs in the console UI. It depends entirely on live client context references (`client.session.prompt` and `client.session.promptAsync`). In a headless environment, these mechanisms are obsolete. These are preserved in the host adapter layer for client-side integration.
 
 ### 3. Utility Wrappers and Helpers
 * **Files:** `archive-entry-validator.ts`, `safe-create-hook.ts`, `session-model-state.ts`, `write-file-atomically.ts`, `zip-extractor.ts`
