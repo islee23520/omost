@@ -9,9 +9,9 @@
 
 All 27 original TypeScript packages under `packages/*` have been converted to .NET and consolidated under `lfe/src/`. The TypeScript runtime surfaces have been removed in a one-shot cutover.
 
-## Revision 2 boundary narrative (SDK-first)
+## Revision 2 Boundary (SDK-first)
 
-PRD Revision 2 clarifies the boundary story:
+PRD Revision 2 clarifies the boundary:
 
 - `lfe` is a **modular .NET Agent OS SDK**.
 - LFE is the source architecture and first inspiration set (ideas/patterns), not a required product boundary.

@@ -11,9 +11,9 @@
 
 This document describes the rollout phases and ownership map for the LFE platform. The original five-phase plan targeting dual TypeScript/.NET implementations has been superseded by a consolidation around `lfe/` as the sole core tree.
 
-## Revision 2 narrative (SDK-first)
+## Revision 2 Boundary (SDK-first)
 
-PRD Revision 2 explicitly sets the product boundary and story:
+PRD Revision 2 explicitly sets the product boundary:
 
 - `lfe` is a **modular .NET Agent OS SDK**.
 - LFE is the upstream source architecture + first inspiration set.

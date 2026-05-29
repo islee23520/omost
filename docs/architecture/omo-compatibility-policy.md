@@ -100,9 +100,9 @@ Codex integration is delivered via `Lfe.CodexMcpBridge`:
 
 ---
 
-## 8. QA Verification
+## 8. Verification
 
-To verify this policy is correctly documented:
+Verify the policy documentation:
 
 ```bash
 grep -n "Phase 1 capabilities" docs/architecture/lfe-compatibility-policy.md

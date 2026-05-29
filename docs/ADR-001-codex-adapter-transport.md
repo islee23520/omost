@@ -52,7 +52,7 @@ compatibility.
 
 ## Boundary note (Revision 2)
 
-This ADR is a transport decision for the Codex edge adapter. PRD Revision 2 also clarifies the boundary narrative:
+This ADR is a transport decision for the Codex edge adapter. PRD Revision 2 also clarifies the boundary:
 
 - `lfe` is a **modular .NET Agent OS SDK**.
 - Codex is the **first reference host / first reference adapter**, not the product boundary.

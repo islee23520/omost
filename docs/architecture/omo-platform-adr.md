@@ -4,7 +4,6 @@
 **Date:** 2026-05-27 (updated)
 **Original Date:** 2026-05-24
 **Decision Makers:** Architecture freeze per lfest-platform-sdk plan (Task 1)
-**Review:** Oracle reviewed and gave final GO
 
 ## Layer taxonomy
 
