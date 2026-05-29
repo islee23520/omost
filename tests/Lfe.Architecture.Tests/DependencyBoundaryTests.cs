@@ -1,4 +1,5 @@
 using System.Xml.Linq;
+using System.Runtime.CompilerServices;
 
 namespace Lfe.Architecture.Tests;
 
@@ -233,9 +234,26 @@ internal static class RepositoryPaths
         return relative.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)[0];
     }
 
-    private static string FindLfeDirectory()
+    private static string FindLfeDirectory([CallerFilePath] string sourcePath = "")
     {
-        var current = new DirectoryInfo(AppContext.BaseDirectory);
+        var fromSourceFile = FindFrom(new FileInfo(sourcePath).Directory);
+        if (fromSourceFile is not null)
+        {
+            return fromSourceFile;
+        }
+
+        var fromWorkingDirectory = FindFrom(new DirectoryInfo(Environment.CurrentDirectory));
+        if (fromWorkingDirectory is not null)
+        {
+            return fromWorkingDirectory;
+        }
+
+        return FindFrom(new DirectoryInfo(AppContext.BaseDirectory))
+            ?? throw new DirectoryNotFoundException($"Could not locate lfe/src from {AppContext.BaseDirectory}.");
+    }
+
+    private static string? FindFrom(DirectoryInfo? current)
+    {
         while (current is not null)
         {
             var candidate = Path.Combine(current.FullName, "lfe");
@@ -244,7 +262,9 @@ internal static class RepositoryPaths
                 return candidate;
             }
 
-            if (Directory.Exists(Path.Combine(current.FullName, "src")) && File.Exists(Path.Combine(current.FullName, "Lfe.sln")))
+            if (Directory.Exists(Path.Combine(current.FullName, "src"))
+                && (File.Exists(Path.Combine(current.FullName, "Lfe.sln"))
+                    || File.Exists(Path.Combine(current.FullName, "LfeCore.sln"))))
             {
                 return current.FullName;
             }
@@ -252,6 +272,6 @@ internal static class RepositoryPaths
             current = current.Parent;
         }
 
-        throw new DirectoryNotFoundException($"Could not locate lfe/src from {AppContext.BaseDirectory}.");
+        return null;
     }
 }
