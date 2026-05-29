@@ -6,13 +6,13 @@ public static class TeamModeCorePaths
 {
     public static string ResolveBaseDir(TeamModeCorePathConfig config)
     {
-        return config.BaseDir ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".omo");
+        return config.BaseDir ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".lfe");
     }
 
     private static string GetTeamDirectory(string baseDir, string teamName, string scope, string? projectRoot = null)
     {
         return string.Equals(scope, "project", StringComparison.Ordinal)
-            ? Path.Combine(projectRoot ?? string.Empty, ".omo", "teams", teamName)
+            ? Path.Combine(projectRoot ?? string.Empty, ".lfe", "teams", teamName)
             : Path.Combine(baseDir, "teams", teamName);
     }
 

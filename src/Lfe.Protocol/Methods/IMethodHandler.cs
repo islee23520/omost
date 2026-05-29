@@ -28,13 +28,13 @@ public abstract class MethodHandlerBase<TParams, TResult> : IMethodHandler
     {
         if (paramsElement.ValueKind is JsonValueKind.Null or JsonValueKind.Undefined)
         {
-            throw OmoProtocolErrors.InvalidRequest($"Method '{MethodName}' requires a params object.");
+            throw LfeProtocolErrors.InvalidRequest($"Method '{MethodName}' requires a params object.");
         }
 
         var parameters = paramsElement.Deserialize<TParams>(_serializerOptions);
         if (parameters is null)
         {
-            throw OmoProtocolErrors.InvalidRequest($"Method '{MethodName}' could not deserialize params.");
+            throw LfeProtocolErrors.InvalidRequest($"Method '{MethodName}' could not deserialize params.");
         }
 
         Validate(parameters);
@@ -151,7 +151,7 @@ internal static class RequestValidator
     {
         if (string.IsNullOrWhiteSpace(value))
         {
-            throw OmoProtocolErrors.InvalidRequest($"{fieldName} must be a non-empty string");
+            throw LfeProtocolErrors.InvalidRequest($"{fieldName} must be a non-empty string");
         }
     }
 
@@ -159,12 +159,12 @@ internal static class RequestValidator
     {
         if (values is null)
         {
-            throw OmoProtocolErrors.InvalidRequest($"{fieldName} must be an array of strings");
+            throw LfeProtocolErrors.InvalidRequest($"{fieldName} must be an array of strings");
         }
 
         if (values.Any(static value => value is null))
         {
-            throw OmoProtocolErrors.InvalidRequest($"{fieldName} must be an array of strings");
+            throw LfeProtocolErrors.InvalidRequest($"{fieldName} must be an array of strings");
         }
     }
 }

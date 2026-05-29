@@ -140,7 +140,7 @@ public static partial class Notifications
         ["grep", "safe_grep", "glob", "safe_glob", "webfetch", "context7_resolve-library-id",
          "context7_query-docs", "websearch_web_search_exa", "context7_get-library-docs", "grep_app_searchgithub"];
 
-    private static readonly HashSet<string> AgentUsageAgentTools = ["task", "call_omo_agent"];
+    private static readonly HashSet<string> AgentUsageAgentTools = ["task", "call_lfe_agent"];
 
     public static bool IsOrchestratorAgentForReminder(string? agentName)
     {

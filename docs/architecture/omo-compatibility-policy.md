@@ -1,4 +1,4 @@
-# OMO Compatibility and Conformance Policy
+# LFE Compatibility and Conformance Policy
 
 **Status:** Updated (post-cutover)
 **Date:** 2026-05-27 (updated)
@@ -11,7 +11,7 @@
 
 This document defines the exact compatibility surface for Phase 1 and the release gate that `lfe` must satisfy.
 
-Compatibility is NOT defined by "full OMO parity." It is defined by passing a bounded, explicitly enumerated set of capabilities and their shared fixtures.
+Compatibility is NOT defined by "full LFE parity." It is defined by passing a bounded, explicitly enumerated set of capabilities and their shared fixtures.
 
 ---
 
@@ -37,11 +37,11 @@ These six names are the complete and final Phase 1 capability set. Any server th
 
 - The implementation is authoritative for Phase 1 conformance.
 - Conformance is measured by passing golden transcripts under `protocol-fixtures/golden/`.
-- The implementation MUST NOT claim "full OMO parity" as a substitute for fixture-based conformance.
+- The implementation MUST NOT claim "full LFE parity" as a substitute for fixture-based conformance.
 
 ### Historical Note
 
-The original policy defined `omots` (TypeScript/Bun) and `lfe` (.NET Core) as peer implementations. The TypeScript implementation was removed in the one-shot cutover. Cross-implementation fixture parity is no longer applicable.
+The original policy defined `lfets` (TypeScript/Bun) and `lfe` (.NET Core) as peer implementations. The TypeScript implementation was removed in the one-shot cutover. Cross-implementation fixture parity is no longer applicable.
 
 ---
 
@@ -52,7 +52,7 @@ A protocol release (any version bump) is valid only when the following condition
 1. `lfe` passes the complete set of golden transcripts stored under `protocol-fixtures/golden/`.
 2. The implementation advertises the correct `protocolVersion` string.
 3. The implementation accepts exactly the correct subset of the six Phase 1 capabilities for that version.
-4. No structural changes to methods, notifications, or error envelopes have occurred outside the rules defined in `docs/protocol/omo-protocol-versioning.md`.
+4. No structural changes to methods, notifications, or error envelopes have occurred outside the rules defined in `docs/protocol/lfe-protocol-versioning.md`.
 
 **Golden transcripts are the single source of truth for release approval.**
 
@@ -62,14 +62,14 @@ A protocol release (any version bump) is valid only when the following condition
 
 Shared fixtures under `protocol-fixtures/golden/` cover:
 
-- `omo.initialize` (version negotiation + capability exchange)
-- `omo.session.start`
-- `omo.run.dispatch`
-- `omo.run.cancel`
-- `omo.run.progress` (all phases: queued, running, tool, completed, failed, cancelled)
-- `omo.run.result`
-- `omo.run.error`
-- Error envelope (all numeric codes + `omoCode` combinations)
+- `lfe.initialize` (version negotiation + capability exchange)
+- `lfe.session.start`
+- `lfe.run.dispatch`
+- `lfe.run.cancel`
+- `lfe.run.progress` (all phases: queued, running, tool, completed, failed, cancelled)
+- `lfe.run.result`
+- `lfe.run.error`
+- Error envelope (all numeric codes + `lfeCode` combinations)
 - Framing edge cases (partial reads, large payloads, malformed headers)
 
 ---
@@ -105,7 +105,7 @@ Codex integration is delivered via `Lfe.CodexMcpBridge`:
 To verify this policy is correctly documented:
 
 ```bash
-grep -n "Phase 1 capabilities" docs/architecture/omo-compatibility-policy.md
+grep -n "Phase 1 capabilities" docs/architecture/lfe-compatibility-policy.md
 ```
 
 Expected output lists exactly the six names above.

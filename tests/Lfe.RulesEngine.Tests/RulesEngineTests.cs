@@ -156,8 +156,8 @@ public class RuleConstantsTests
     public void SourcePriority_ContainsAllSources()
     {
         Assert.Equal(10, RuleConstants.SourcePriority.Count);
-        Assert.Equal(0, RuleConstants.SourcePriority[".omo/rules"]);
-        Assert.Equal(100, RuleConstants.SourcePriority["~/.omo/rules"]);
+        Assert.Equal(0, RuleConstants.SourcePriority[".lfe/rules"]);
+        Assert.Equal(100, RuleConstants.SourcePriority["~/.lfe/rules"]);
     }
 
     [Fact]
@@ -175,13 +175,13 @@ public class RuleOrderingTests
     {
         var candidates = new List<RuleFileCandidate>
         {
-            new("/home/user/.omo/rules/global.md", "/home/user/.omo/rules/global.md", true, RuleConstants.GlobalDistance, ".omo/rules/global.md", "~/.omo/rules"),
-            new("/project/.omo/rules/local.md", "/project/.omo/rules/local.md", false, 0, ".omo/rules/local.md", ".omo/rules"),
+            new("/home/user/.lfe/rules/global.md", "/home/user/.lfe/rules/global.md", true, RuleConstants.GlobalDistance, ".lfe/rules/global.md", "~/.lfe/rules"),
+            new("/project/.lfe/rules/local.md", "/project/.lfe/rules/local.md", false, 0, ".lfe/rules/local.md", ".lfe/rules"),
         };
 
         var sorted = RuleOrdering.SortCandidates(candidates);
-        Assert.Equal("/project/.omo/rules/local.md", sorted[0].Path);
-        Assert.Equal("/home/user/.omo/rules/global.md", sorted[1].Path);
+        Assert.Equal("/project/.lfe/rules/local.md", sorted[0].Path);
+        Assert.Equal("/home/user/.lfe/rules/global.md", sorted[1].Path);
     }
 
     [Fact]
@@ -189,8 +189,8 @@ public class RuleOrderingTests
     {
         var candidates = new List<RuleFileCandidate>
         {
-            new("/project/src/sub/rule.md", "/project/src/sub/rule.md", false, 2, "src/sub/rule.md", ".omo/rules"),
-            new("/project/src/rule.md", "/project/src/rule.md", false, 0, "src/rule.md", ".omo/rules"),
+            new("/project/src/sub/rule.md", "/project/src/sub/rule.md", false, 2, "src/sub/rule.md", ".lfe/rules"),
+            new("/project/src/rule.md", "/project/src/rule.md", false, 0, "src/rule.md", ".lfe/rules"),
         };
 
         var sorted = RuleOrdering.SortCandidates(candidates);
@@ -206,7 +206,7 @@ public class RuleCacheTests
         var cache = RuleCache.CreateRuleScanCache();
         var candidates = new List<RuleFileCandidate>
         {
-            new("/a.md", "/a.md", false, 0, "a.md", ".omo/rules"),
+            new("/a.md", "/a.md", false, 0, "a.md", ".lfe/rules"),
         };
 
         cache.Set("key", candidates);

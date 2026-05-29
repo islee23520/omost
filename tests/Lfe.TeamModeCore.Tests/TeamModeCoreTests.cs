@@ -75,8 +75,8 @@ public sealed class TeamModeCoreTests
     [Fact]
     public void ResolvesPathsAndMergesSpecs()
     {
-        Assert.Equal("/tmp/omo", TeamModeCorePaths.ResolveBaseDir(new TeamModeCorePathConfig { BaseDir = "/tmp/omo" }));
-        Assert.Equal("/tmp/omo/runtime/run-1/tasks", TeamModeCorePaths.GetTasksDir("/tmp/omo", "run-1"));
+        Assert.Equal("/tmp/lfe", TeamModeCorePaths.ResolveBaseDir(new TeamModeCorePathConfig { BaseDir = "/tmp/lfe" }));
+        Assert.Equal("/tmp/lfe/runtime/run-1/tasks", TeamModeCorePaths.GetTasksDir("/tmp/lfe", "run-1"));
 
         var merged = TeamModeCorePaths.MergeDiscoveredTeamSpecs(
             [new TeamSpecEntry { Name = "alpha", Scope = "project", Path = "/project/alpha" }],

@@ -1,4 +1,4 @@
-# OMO Package Layer Ownership Classification
+# LFE Package Layer Ownership Classification
 
 **Status:** Updated (post-cutover)
 **Date:** 2026-05-27 (updated)
@@ -14,7 +14,7 @@ All 27 original TypeScript packages under `packages/*` have been converted to .N
 PRD Revision 2 clarifies the boundary story:
 
 - `lfe` is a **modular .NET Agent OS SDK**.
-- OMO is the source architecture and first inspiration set (ideas/patterns), not a required product boundary.
+- LFE is the source architecture and first inspiration set (ideas/patterns), not a required product boundary.
 - Codex is the **first reference host / first reference adapter**, not the product boundary.
 - `Lfe.StandaloneRuntime` is a reference composition root (example wiring), not a mandatory architecture.
 
@@ -51,10 +51,10 @@ Before implementation handoff, every `lfe/src/*` project must be classified.
 | `Lfe.AgentsMd` | stable public v0 candidate | may depend on rules/core utilities only |
 | `Lfe.ModelCore` | experimental public | model/provider policy evolves quickly |
 | `Lfe.SkillMcp` | experimental public | skill-embedded MCP parsing, no host lifecycle ownership |
-| `Lfe.SkillsCore` | experimental public | OMO-inspired defaults; should be replaceable |
+| `Lfe.SkillsCore` | experimental public | LFE-inspired defaults; should be replaceable |
 | `Lfe.UlwKernel` | experimental public | runtime policy; depends on contracts/state |
 | `Lfe.UlwLoopState` | stable/experimental public | state abstractions and stores |
-| `Lfe.Hooks` | experimental public | OMO-inspired hook catalog; no host-specific APIs |
+| `Lfe.Hooks` | experimental public | LFE-inspired hook catalog; no host-specific APIs |
 | `Lfe.TeamModeCore` | experimental public | portable team data/model only |
 | `Lfe.Tmux` | experimental public | local terminal capability, no host ownership |
 | `Lfe.TmuxSubagent` | experimental public | portable subagent decision logic |
@@ -98,13 +98,13 @@ Before implementation handoff, every `lfe/src/*` project must be classified.
 | `Lfe.UlwHostContract` | `ulw-host-contract` | ULW host seam: `IUlwHost`, prompt receipts, messages |
 | `Lfe.Utils` | `utils` | General utilities: frontmatter, JSONC, logging, paths |
 
-### Runtime Packages (formerly `omots-only`)
+### Runtime Packages (formerly `lfets-only`)
 
 | .NET Project | Former TS Package | Purpose |
 |---|---|---|
 | `Lfe.BackgroundAgent` | `background-agent-core` | Background-task lifecycle, polling, concurrency |
 | `Lfe.BoulderState` | `boulder-state` | Boulder/Prometheus workflow state management |
-| `Lfe.Hooks` | `hooks-core` | OMO hook catalog, guards, recovery behavior |
+| `Lfe.Hooks` | `hooks-core` | LFE hook catalog, guards, recovery behavior |
 | `Lfe.StandaloneRuntime` | `standalone-runtime` | Composition root wiring together all packages |
 | `Lfe.TeamModeCore` | `team-mode-core` | Team registry, tasklist, mailbox, session registry |
 | `Lfe.Tmux` | `tmux-core` | Tmux detection, runner, layout, pane management |
@@ -137,4 +137,4 @@ Before implementation handoff, every `lfe/src/*` project must be classified.
 
 ## Historical Note
 
-The original classification distinguished between `shared-sdk`, `omots-only`, and `bridge-only` ownership under `packages/*`. With the TypeScript-to-.NET conversion and consolidation, all packages share a single ownership model under `lfe/`. The original ownership distinctions are preserved above for archival reference only.
+The original classification distinguished between `shared-sdk`, `lfets-only`, and `bridge-only` ownership under `packages/*`. With the TypeScript-to-.NET conversion and consolidation, all packages share a single ownership model under `lfe/`. The original ownership distinctions are preserved above for archival reference only.

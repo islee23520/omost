@@ -13,6 +13,6 @@ public sealed class ResultEmitter
 
     public Task EmitAsync(RunResultParams parameters, CancellationToken cancellationToken = default)
     {
-        return _notificationEmitter.EmitAsync(OmoNotificationNames.RunResult, parameters, cancellationToken);
+        return _notificationEmitter.EmitAsync(LfeNotificationNames.RunResult, parameters, cancellationToken);
     }
 }

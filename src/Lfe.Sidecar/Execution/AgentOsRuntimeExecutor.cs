@@ -12,7 +12,7 @@ using UlwHostPromptRequest = Lfe.UlwHostContract.UlwPromptRequest;
 
 namespace Lfe.Sidecar.Execution;
 
-public sealed class AgentOsRuntimeExecutor : IOmoRunExecutor
+public sealed class AgentOsRuntimeExecutor : ILfeRunExecutor
 {
     private readonly ConcurrentDictionary<string, string> _runSessions = new(StringComparer.Ordinal);
     private readonly ConcurrentDictionary<string, byte> _terminalRuns = new(StringComparer.Ordinal);
@@ -27,7 +27,7 @@ public sealed class AgentOsRuntimeExecutor : IOmoRunExecutor
         _errorEmitter = errorEmitter;
     }
 
-    public async Task<OmoRunAccepted> DispatchAsync(RunDispatchRequestParams request, CancellationToken ct)
+    public async Task<LfeRunAccepted> DispatchAsync(RunDispatchRequestParams request, CancellationToken ct)
     {
         ct.ThrowIfCancellationRequested();
         ValidateDispatchRequest(request);
@@ -53,11 +53,11 @@ public sealed class AgentOsRuntimeExecutor : IOmoRunExecutor
                 {
                     FinalSessionId = finalSessionId,
                     RunId = request.RunId,
-                    Status = OmoRunStatusValues.Completed,
+                    Status = LfeRunStatusValues.Completed,
                 }, ct).ConfigureAwait(false);
             }
 
-            return new OmoRunAccepted
+            return new LfeRunAccepted
             {
                 Accepted = receipt.Accepted,
                 RunId = request.RunId,
@@ -70,7 +70,7 @@ public sealed class AgentOsRuntimeExecutor : IOmoRunExecutor
                 FinalSessionId = request.SessionId,
                 OutputText = "Run cancelled: Cancellation requested",
                 RunId = request.RunId,
-                Status = OmoRunStatusValues.Cancelled,
+                Status = LfeRunStatusValues.Cancelled,
             }).ConfigureAwait(false);
             throw;
         }
@@ -87,7 +87,7 @@ public sealed class AgentOsRuntimeExecutor : IOmoRunExecutor
         }
     }
 
-    public async Task<OmoCancelResult> CancelAsync(string runId, string? reason, CancellationToken ct)
+    public async Task<LfeCancelResult> CancelAsync(string runId, string? reason, CancellationToken ct)
     {
         ct.ThrowIfCancellationRequested();
 
@@ -101,13 +101,13 @@ public sealed class AgentOsRuntimeExecutor : IOmoRunExecutor
             FinalSessionId = sessionId ?? string.Empty,
             OutputText = string.IsNullOrWhiteSpace(reason) ? "Run cancelled" : $"Run cancelled: {reason}",
             RunId = runId,
-            Status = OmoRunStatusValues.Cancelled,
+            Status = LfeRunStatusValues.Cancelled,
         }).ConfigureAwait(false);
 
-        return new OmoCancelResult
+        return new LfeCancelResult
         {
             RunId = runId,
-            Status = OmoRunStatusValues.Cancelled,
+            Status = LfeRunStatusValues.Cancelled,
         };
     }
 
@@ -115,17 +115,17 @@ public sealed class AgentOsRuntimeExecutor : IOmoRunExecutor
     {
         if (string.IsNullOrWhiteSpace(request.RunId))
         {
-            throw OmoProtocolErrors.InvalidParams("runId is required.");
+            throw LfeProtocolErrors.InvalidParams("runId is required.");
         }
 
         if (string.IsNullOrWhiteSpace(request.SessionId))
         {
-            throw OmoProtocolErrors.InvalidParams("sessionId is required.");
+            throw LfeProtocolErrors.InvalidParams("sessionId is required.");
         }
 
         if (string.IsNullOrWhiteSpace(request.Prompt))
         {
-            throw OmoProtocolErrors.InvalidParams("prompt is required.");
+            throw LfeProtocolErrors.InvalidParams("prompt is required.");
         }
     }
 

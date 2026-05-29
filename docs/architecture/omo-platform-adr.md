@@ -1,16 +1,16 @@
-# OMO Platform Architecture Decision Record
+# LFE Platform Architecture Decision Record
 
 **Status:** Updated (post-cutover)
 **Date:** 2026-05-27 (updated)
 **Original Date:** 2026-05-24
-**Decision Makers:** Architecture freeze per omost-platform-sdk plan (Task 1)
+**Decision Makers:** Architecture freeze per lfest-platform-sdk plan (Task 1)
 **Review:** Oracle reviewed and gave final GO
 
 ## Layer taxonomy
 
 The repository is organized around `lfe/` as the sole core implementation tree.
 
-- `lfe/` is the .NET Core implementation toolkit. It provides a protocol-compatible implementation of the OMO orchestration surface. All packages, tests, and tooling live under this tree.
+- `lfe/` is the .NET Core implementation toolkit. It provides a protocol-compatible implementation of the LFE orchestration surface. All packages, tests, and tooling live under this tree.
 - `Lfe.CodexMcpBridge` (within `lfe/src/`) is the supported Codex integration path. It exposes Codex adapter functionality as MCP-compatible tools.
 - `Lfe.CodexAdapter` (within `lfe/src/`) provides the underlying Codex CLI process management, JSON-RPC parsing, and ULW host implementation.
 
@@ -18,7 +18,7 @@ Architecture and protocol artifacts live under `docs/architecture/*` and `docs/p
 
 ### Historical note
 
-Previous versions of this document described a four-root layout (`packages/*`, `omots/`, `lfe/`, `hosts/opencode-bridge/`). The TypeScript/Bun runtime surfaces (`omots/`, `packages/`, `hosts/`) were removed in a one-shot cutover. Only `lfe/` and documentation survive.
+Previous versions of this document described a four-root layout (`packages/*`, `lfets/`, `lfe/`, `hosts/opencode-bridge/`). The TypeScript/Bun runtime surfaces (`lfets/`, `packages/`, `hosts/`) were removed in a one-shot cutover. Only `lfe/` and documentation survive.
 
 ## Ownership
 
@@ -45,7 +45,7 @@ Codex supports a manifest/config-driven plugin package surface (`.codex-plugin/p
 
 ## Versioning
 
-Protocol versioning is defined separately in `docs/protocol/omo-protocol-versioning.md`. Version negotiation occurs at `omo.initialize`.
+Protocol versioning is defined separately in `docs/protocol/lfe-protocol-versioning.md`. Version negotiation occurs at `lfe.initialize`.
 
 ## Boundary rules
 

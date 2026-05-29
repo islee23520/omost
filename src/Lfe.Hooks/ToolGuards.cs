@@ -54,11 +54,11 @@ public static partial class ToolGuards
     public static bool IsOverwriteEnabled(object? value) =>
         value is true || (value is string s && s.Equals("true", StringComparison.OrdinalIgnoreCase));
 
-    [GeneratedRegex(@"(^|[/\\])\.omo([/\\]|$)")]
-    private static partial Regex OmoWorkspacePattern();
+    [GeneratedRegex(@"(^|[/\\])\.lfe([/\\]|$)")]
+    private static partial Regex LfeWorkspacePattern();
 
-    public static bool IsOmoWorkspacePath(string filePath) =>
-        OmoWorkspacePattern().IsMatch(filePath);
+    public static bool IsLfeWorkspacePath(string filePath) =>
+        LfeWorkspacePattern().IsMatch(filePath);
 
     public static WriteExistingFileGuardDecision ResolveWriteExistingFileGuard(
         ToolContext input, ExistingFileGuardArgs? args, WriteExistingFileGuardOptions options)
@@ -80,7 +80,7 @@ public static partial class ToolGuards
         }
 
         var overwriteEnabled = IsOverwriteEnabled(args?.Overwrite);
-        if (!options.Exists(filePath) || IsOmoWorkspacePath(filePath) || overwriteEnabled)
+        if (!options.Exists(filePath) || IsLfeWorkspacePath(filePath) || overwriteEnabled)
             return WriteExistingFileGuardDecision.Allow;
 
         if (input.SessionID is not null && options.ReadPermissions.Remove(filePath))
@@ -165,7 +165,7 @@ public static partial class ToolGuards
         var resolvedPath = Path.GetFullPath(Path.Combine(workspaceRoot, filePath));
         var relativePath = Path.GetRelativePath(workspaceRoot, resolvedPath);
         return !relativePath.StartsWith("..") && !Path.IsPathRooted(relativePath)
-            && Regex.IsMatch(relativePath, @"(^|[/\\])\.omo([/\\]|$)", RegexOptions.IgnoreCase)
+            && Regex.IsMatch(relativePath, @"(^|[/\\])\.lfe([/\\]|$)", RegexOptions.IgnoreCase)
             && resolvedPath.EndsWith(".md", StringComparison.OrdinalIgnoreCase);
     }
 

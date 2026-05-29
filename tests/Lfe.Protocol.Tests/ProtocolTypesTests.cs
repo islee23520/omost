@@ -11,9 +11,9 @@ public sealed class ProtocolTypesTests
         Assert.Equal(-32600, ErrorCode.InvalidRequest);
         Assert.Equal(-32001, ErrorCode.VersionMismatch);
         Assert.Equal(-32010, ErrorCode.RunFailure);
-        Assert.Equal("OMO_INVALID_REQUEST", OmoErrorCode.InvalidRequest);
-        Assert.Equal("OMO_VERSION_MISMATCH", OmoErrorCode.VersionMismatch);
-        Assert.Equal("OMO_RUN_FAILED", OmoErrorCode.RunFailed);
+        Assert.Equal("LFE_INVALID_REQUEST", LfeErrorCode.InvalidRequest);
+        Assert.Equal("LFE_VERSION_MISMATCH", LfeErrorCode.VersionMismatch);
+        Assert.Equal("LFE_RUN_FAILED", LfeErrorCode.RunFailed);
     }
 
     [Fact]
@@ -22,12 +22,12 @@ public sealed class ProtocolTypesTests
         Assert.Equal(
             new[]
             {
-                "omo.initialize",
-                "omo.session.start",
-                "omo.run.dispatch",
-                "omo.run.cancel",
+                "lfe.initialize",
+                "lfe.session.start",
+                "lfe.run.dispatch",
+                "lfe.run.cancel",
             },
-            OmoMethodNames.All);
+            LfeMethodNames.All);
     }
 
     [Fact]
@@ -36,11 +36,11 @@ public sealed class ProtocolTypesTests
         Assert.Equal(
             new[]
             {
-                "omo.run.progress",
-                "omo.run.result",
-                "omo.run.error",
+                "lfe.run.progress",
+                "lfe.run.result",
+                "lfe.run.error",
             },
-            OmoNotificationNames.All);
+            LfeNotificationNames.All);
     }
 
     [Fact]
@@ -48,10 +48,10 @@ public sealed class ProtocolTypesTests
     {
         Assert.Equal(
             new[] { "queued", "running", "tool", "completed", "failed", "cancelled" },
-            OmoRunPhaseValues.All);
+            LfeRunPhaseValues.All);
         Assert.Equal(
             new[] { "completed", "failed", "cancelled" },
-            OmoRunStatusValues.All);
+            LfeRunStatusValues.All);
     }
 
     [Fact]
@@ -67,6 +67,6 @@ public sealed class ProtocolTypesTests
                 "phase1.run-result",
                 "phase1.run-cancel",
             },
-            OmoCapabilityNames.All);
+            LfeCapabilityNames.All);
     }
 }

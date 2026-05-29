@@ -36,9 +36,9 @@ public sealed class JsonRpcServer : INotificationEmitter, IAsyncDisposable
         var runExecutor = new ProtocolConformanceExecutor(serverState, progressEmitter, resultEmitter, errorEmitter);
 
         var initializeHandler = new InitializeHandler(
-            OmoProtocolInfo.ProtocolVersion,
-            OmoProtocolInfo.ImplementationName,
-            OmoCapabilityNames.All);
+            LfeProtocolInfo.ProtocolVersion,
+            LfeProtocolInfo.ImplementationName,
+            LfeCapabilityNames.All);
         _methodHandlers[initializeHandler.MethodName] = initializeHandler;
 
         var sessionStartHandler = new SessionStartHandler(serverState);
@@ -114,7 +114,7 @@ public sealed class JsonRpcServer : INotificationEmitter, IAsyncDisposable
                 }
                 catch (InvalidDataException exception)
                 {
-                    await WriteErrorAsync(null, OmoProtocolErrors.InvalidRequest(exception.Message).ToJsonRpcError(), cancellationToken)
+                    await WriteErrorAsync(null, LfeProtocolErrors.InvalidRequest(exception.Message).ToJsonRpcError(), cancellationToken)
                         .ConfigureAwait(false);
                     await LogErrorAsync(exception.Message).ConfigureAwait(false);
                 }
@@ -192,7 +192,7 @@ public sealed class JsonRpcServer : INotificationEmitter, IAsyncDisposable
         }
         catch (JsonException exception)
         {
-            await WriteErrorAsync(null, OmoProtocolErrors.ParseError(exception.Message).ToJsonRpcError(), cancellationToken)
+            await WriteErrorAsync(null, LfeProtocolErrors.ParseError(exception.Message).ToJsonRpcError(), cancellationToken)
                 .ConfigureAwait(false);
             await LogErrorAsync(exception.Message).ConfigureAwait(false);
             return;
@@ -202,7 +202,7 @@ public sealed class JsonRpcServer : INotificationEmitter, IAsyncDisposable
             !string.Equals(request.Jsonrpc, JsonRpcProtocol.Version, StringComparison.Ordinal) ||
             string.IsNullOrWhiteSpace(request.Method))
         {
-            await WriteErrorAsync(null, OmoProtocolErrors.InvalidRequest("Invalid JSON-RPC 2.0 request envelope.").ToJsonRpcError(), cancellationToken)
+            await WriteErrorAsync(null, LfeProtocolErrors.InvalidRequest("Invalid JSON-RPC 2.0 request envelope.").ToJsonRpcError(), cancellationToken)
                 .ConfigureAwait(false);
             return;
         }
@@ -215,14 +215,14 @@ public sealed class JsonRpcServer : INotificationEmitter, IAsyncDisposable
 
         if (!JsonRpcProtocol.TryConvertId(request.Id, out var id))
         {
-            await WriteErrorAsync(null, OmoProtocolErrors.InvalidRequest("Invalid JSON-RPC request id.").ToJsonRpcError(), cancellationToken)
+            await WriteErrorAsync(null, LfeProtocolErrors.InvalidRequest("Invalid JSON-RPC request id.").ToJsonRpcError(), cancellationToken)
                 .ConfigureAwait(false);
             return;
         }
 
         if (!_methodHandlers.TryGetValue(request.Method, out var handler))
         {
-            await WriteErrorAsync(id, OmoProtocolErrors.MethodNotFound(request.Method).ToJsonRpcError(), cancellationToken)
+            await WriteErrorAsync(id, LfeProtocolErrors.MethodNotFound(request.Method).ToJsonRpcError(), cancellationToken)
                 .ConfigureAwait(false);
             return;
         }
@@ -236,14 +236,14 @@ public sealed class JsonRpcServer : INotificationEmitter, IAsyncDisposable
                 Result = result,
             }, cancellationToken).ConfigureAwait(false);
         }
-        catch (OmoProtocolException exception)
+        catch (LfeProtocolException exception)
         {
             await WriteErrorAsync(id, exception.ToJsonRpcError(), cancellationToken).ConfigureAwait(false);
             await LogErrorAsync(exception.Message).ConfigureAwait(false);
         }
         catch (Exception exception)
         {
-            await WriteErrorAsync(id, OmoProtocolErrors.InternalError(exception.Message).ToJsonRpcError(), cancellationToken)
+            await WriteErrorAsync(id, LfeProtocolErrors.InternalError(exception.Message).ToJsonRpcError(), cancellationToken)
                 .ConfigureAwait(false);
             await LogErrorAsync(exception.ToString()).ConfigureAwait(false);
         }

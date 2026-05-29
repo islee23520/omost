@@ -8,9 +8,9 @@ using Lfe.Protocol.Types;
 namespace Lfe.Protocol.Execution;
 
 /// <summary>
-/// Implementation of <see cref="IOmoRunExecutor"/> that ensures protocol conformance.
+/// Implementation of <see cref="ILfeRunExecutor"/> that ensures protocol conformance.
 /// </summary>
-public sealed class ProtocolConformanceExecutor : IOmoRunExecutor
+public sealed class ProtocolConformanceExecutor : ILfeRunExecutor
 {
     private readonly ErrorEmitter _errorEmitter;
     private readonly ProgressEmitter _progressEmitter;
@@ -37,19 +37,19 @@ public sealed class ProtocolConformanceExecutor : IOmoRunExecutor
     }
 
     /// <inheritdoc />
-    public Task<OmoRunAccepted> DispatchAsync(RunDispatchRequestParams request, CancellationToken ct)
+    public Task<LfeRunAccepted> DispatchAsync(RunDispatchRequestParams request, CancellationToken ct)
     {
         ct.ThrowIfCancellationRequested();
 
         if (!_serverState.HasSession(request.SessionId))
         {
-            throw OmoProtocolErrors.InvalidParams($"Unknown session '{request.SessionId}'.");
+            throw LfeProtocolErrors.InvalidParams($"Unknown session '{request.SessionId}'.");
         }
 
-        var runRecord = _serverState.RecordRun(request.RunId, request.SessionId, OmoRunPhaseValues.Queued);
+        var runRecord = _serverState.RecordRun(request.RunId, request.SessionId, LfeRunPhaseValues.Queued);
         _ = ExecuteRunAsync(runRecord, request);
 
-        return Task.FromResult(new OmoRunAccepted
+        return Task.FromResult(new LfeRunAccepted
         {
             Accepted = true,
             RunId = request.RunId,
@@ -57,15 +57,15 @@ public sealed class ProtocolConformanceExecutor : IOmoRunExecutor
     }
 
     /// <inheritdoc />
-    public Task<OmoCancelResult> CancelAsync(string runId, string? reason, CancellationToken ct)
+    public Task<LfeCancelResult> CancelAsync(string runId, string? reason, CancellationToken ct)
     {
         ct.ThrowIfCancellationRequested();
 
         if (_serverState.TryGetRun(runId, out var runRecord) &&
             runRecord is not null &&
-            OmoRunStatusValues.IsTerminal(runRecord.Status))
+            LfeRunStatusValues.IsTerminal(runRecord.Status))
         {
-            return Task.FromResult(new OmoCancelResult
+            return Task.FromResult(new LfeCancelResult
             {
                 RunId = runId,
                 Status = runRecord.Status,
@@ -74,10 +74,10 @@ public sealed class ProtocolConformanceExecutor : IOmoRunExecutor
 
         _serverState.TryCancelRun(runId, reason, out _);
 
-        return Task.FromResult(new OmoCancelResult
+        return Task.FromResult(new LfeCancelResult
         {
             RunId = runId,
-            Status = OmoRunStatusValues.Cancelled,
+            Status = LfeRunStatusValues.Cancelled,
         });
     }
 
@@ -90,31 +90,31 @@ public sealed class ProtocolConformanceExecutor : IOmoRunExecutor
             await _progressEmitter.EmitAsync(new RunProgressParams
             {
                 Message = "Run accepted and queued",
-                Phase = OmoRunPhaseValues.Queued,
+                Phase = LfeRunPhaseValues.Queued,
                 RunId = parameters.RunId,
                 Completed = 0,
                 Total = 3,
             }, runRecord.CancellationTokenSource.Token).ConfigureAwait(false);
 
             await Task.Delay(10, runRecord.CancellationTokenSource.Token).ConfigureAwait(false);
-            _serverState.UpdateRunStatus(parameters.RunId, OmoRunPhaseValues.Running);
+            _serverState.UpdateRunStatus(parameters.RunId, LfeRunPhaseValues.Running);
 
             await _progressEmitter.EmitAsync(new RunProgressParams
             {
                 Message = "Agent is processing the request",
-                Phase = OmoRunPhaseValues.Running,
+                Phase = LfeRunPhaseValues.Running,
                 RunId = parameters.RunId,
                 Completed = 1,
                 Total = 3,
             }, runRecord.CancellationTokenSource.Token).ConfigureAwait(false);
 
             await Task.Delay(10, runRecord.CancellationTokenSource.Token).ConfigureAwait(false);
-            _serverState.UpdateRunStatus(parameters.RunId, OmoRunStatusValues.Completed);
+            _serverState.UpdateRunStatus(parameters.RunId, LfeRunStatusValues.Completed);
 
             await _progressEmitter.EmitAsync(new RunProgressParams
             {
                 Message = "Run completed successfully",
-                Phase = OmoRunPhaseValues.Completed,
+                Phase = LfeRunPhaseValues.Completed,
                 RunId = parameters.RunId,
                 Completed = 3,
                 Total = 3,
@@ -126,12 +126,12 @@ public sealed class ProtocolConformanceExecutor : IOmoRunExecutor
                 OutputText = $"Completed Phase 1 run: {parameters.Prompt}",
                 OutputJson = CreateOutputJson(parameters),
                 RunId = parameters.RunId,
-                Status = OmoRunStatusValues.Completed,
+                Status = LfeRunStatusValues.Completed,
             }, runRecord.CancellationTokenSource.Token).ConfigureAwait(false);
         }
         catch (OperationCanceledException) when (runRecord.CancellationTokenSource.IsCancellationRequested)
         {
-            _serverState.UpdateRunStatus(parameters.RunId, OmoRunStatusValues.Cancelled);
+            _serverState.UpdateRunStatus(parameters.RunId, LfeRunStatusValues.Cancelled);
 
             var reason = string.IsNullOrWhiteSpace(runRecord.CancellationReason)
                 ? "Cancellation requested"
@@ -143,17 +143,17 @@ public sealed class ProtocolConformanceExecutor : IOmoRunExecutor
                 OutputText = $"Run cancelled: {reason}",
                 OutputJson = JsonSerializer.SerializeToElement(new { reason }, JsonRpcProtocol.SerializerOptions),
                 RunId = parameters.RunId,
-                Status = OmoRunStatusValues.Cancelled,
+                Status = LfeRunStatusValues.Cancelled,
             }).ConfigureAwait(false);
         }
         catch (Exception exception)
         {
-            _serverState.UpdateRunStatus(parameters.RunId, OmoRunStatusValues.Failed);
+            _serverState.UpdateRunStatus(parameters.RunId, LfeRunStatusValues.Failed);
 
             await _progressEmitter.EmitAsync(new RunProgressParams
             {
                 Message = exception.Message,
-                Phase = OmoRunPhaseValues.Failed,
+                Phase = LfeRunPhaseValues.Failed,
                 RunId = parameters.RunId,
             }).ConfigureAwait(false);
 

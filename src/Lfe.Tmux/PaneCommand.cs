@@ -15,6 +15,6 @@ public static class PaneCommand
     public static string BuildTmuxPlaceholderCommand(string description)
     {
         var escapedDescription = ShellEnv.ShellEscapeForDoubleQuotedCommand(description);
-        return $"{TmuxCommandShell} -c \"printf '%s\\n%s\\n' \\\"OMO subagent pane ready: {escapedDescription}\\\" \\\"Focus this pane to attach.\\\"; exec tail -f /dev/null\"";
+        return $"{TmuxCommandShell} -c \"printf '%s\\n%s\\n' \\\"LFE subagent pane ready: {escapedDescription}\\\" \\\"Focus this pane to attach.\\\"; exec tail -f /dev/null\"";
     }
 }

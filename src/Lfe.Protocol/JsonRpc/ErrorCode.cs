@@ -11,9 +11,9 @@ public static class ErrorCode
     public const int RunFailure = -32010;
 }
 
-public static class OmoErrorCode
+public static class LfeErrorCode
 {
-    public const string VersionMismatch = "OMO_VERSION_MISMATCH";
-    public const string InvalidRequest = "OMO_INVALID_REQUEST";
-    public const string RunFailed = "OMO_RUN_FAILED";
+    public const string VersionMismatch = "LFE_VERSION_MISMATCH";
+    public const string InvalidRequest = "LFE_INVALID_REQUEST";
+    public const string RunFailed = "LFE_RUN_FAILED";
 }

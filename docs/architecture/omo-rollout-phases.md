@@ -1,4 +1,4 @@
-# OMO Rollout Phases and Ownership Map
+# LFE Rollout Phases and Ownership Map
 
 **Status:** Updated (post-cutover)
 **Date:** 2026-05-27 (updated)
@@ -9,14 +9,14 @@
 
 ## Purpose
 
-This document describes the rollout phases and ownership map for the OMO platform. The original five-phase plan targeting dual TypeScript/.NET implementations has been superseded by a consolidation around `lfe/` as the sole core tree.
+This document describes the rollout phases and ownership map for the LFE platform. The original five-phase plan targeting dual TypeScript/.NET implementations has been superseded by a consolidation around `lfe/` as the sole core tree.
 
 ## Revision 2 narrative (SDK-first)
 
 PRD Revision 2 explicitly sets the product boundary and story:
 
 - `lfe` is a **modular .NET Agent OS SDK**.
-- OMO is the upstream source architecture + first inspiration set.
+- LFE is the upstream source architecture + first inspiration set.
 - Codex is the **first reference host / first reference adapter**, not the product boundary.
 - `Lfe.StandaloneRuntime` is a reference composition root (example wiring), not a mandatory architecture.
 
@@ -42,9 +42,9 @@ Core/capability/runtime -> adapters
 
 Architecture freeze, package classification (27 packages converted to .NET), protocol freeze, and boundary validation completed.
 
-### Phase 2: omots + opencode-bridge Vertical Slice ✅ SUPERSEDED
+### Phase 2: lfets + opencode-bridge Vertical Slice ✅ SUPERSEDED
 
-The TypeScript/Bun toolkit (`omots/`) and host bridge (`hosts/opencode-bridge/`) were implemented and validated, then removed in the one-shot cutover to consolidate around `lfe/`.
+The TypeScript/Bun toolkit (`lfets/`) and host bridge (`hosts/opencode-bridge/`) were implemented and validated, then removed in the one-shot cutover to consolidate around `lfe/`.
 
 ### Phase 3: lfe Protocol-Compatible Vertical Slice ✅ COMPLETE
 
@@ -52,7 +52,7 @@ The TypeScript/Bun toolkit (`omots/`) and host bridge (`hosts/opencode-bridge/`)
 
 ### Phase 4: Cross-Implementation Conformance ✅ COMPLETE (Single Implementation)
 
-With the removal of `omots/`, conformance is validated through `lfe/` alone. Golden transcripts under `protocol-fixtures/golden/` and `protocol-fixtures/phase1/` remain as the conformance baseline.
+With the removal of `lfets/`, conformance is validated through `lfe/` alone. Golden transcripts under `protocol-fixtures/golden/` and `protocol-fixtures/phase1/` remain as the conformance baseline.
 
 ### Phase 5: Codex Integration ✅ COMPLETE
 
@@ -71,7 +71,7 @@ Codex integration delivered via `Lfe.CodexMcpBridge` — an MCP-compatible tool 
 ### Historical Owners (Surfaces Removed)
 
 - `shared-sdk owner` — previously owned `packages/*` (converted to .NET, now within `lfe/`)
-- `omots owner` — previously owned `omots/` (removed in cutover)
+- `lfets owner` — previously owned `lfets/` (removed in cutover)
 - `opencode bridge owner` — previously owned `hosts/opencode-bridge/` (removed in cutover)
 
 ---
@@ -89,16 +89,16 @@ Codex integration is **delivered** via `Lfe.CodexMcpBridge`:
 
 ## Protocol References
 
-- Frozen protocol spec: `docs/protocol/omo-stdio-jsonrpc.md`
-- Versioning policy: `docs/protocol/omo-protocol-versioning.md`
-- Compatibility policy: `docs/architecture/omo-compatibility-policy.md`
+- Frozen protocol spec: `docs/protocol/lfe-stdio-jsonrpc.md`
+- Versioning policy: `docs/protocol/lfe-protocol-versioning.md`
+- Compatibility policy: `docs/architecture/lfe-compatibility-policy.md`
 - Codex adapter transport ADR: `lfe/docs/ADR-001-codex-adapter-transport.md`
 
-## OMO inheritance ledger (PRD §17)
+## LFE inheritance ledger (PRD §17)
 
-Every inherited OMO idea must be tracked:
+Every inherited LFE idea must be tracked:
 
-| OMO idea | lfe package/preset | Status | Adapter-bound exclusions |
+| LFE idea | lfe package/preset | Status | Adapter-bound exclusions |
 |---|---|---|---|
 | ULW loop | `Lfe.UlwKernel`, `Lfe.UlwLoopState` | experimental public | host-specific prompt injection |
 | Host seam | `Lfe.UlwHostContract` | stable public v0 candidate | OpenCode session APIs |
@@ -110,7 +110,7 @@ Every inherited OMO idea must be tracked:
 | Background agents | `Lfe.BackgroundAgent` | experimental public | host-specific process/session management |
 | MCP bridge ideas | `Lfe.SkillMcp`, `Lfe.AstGrepMcp`, `Lfe.CodexMcpBridge` | mixed | host MCP lifecycle/OAuth |
 | Session memory/search | `Lfe.SessionManager` | experimental public | host storage/session APIs |
-| OMO presets | `Lfe.AgentOs.OmoPreset` future | experimental preset | should remain replaceable |
+| LFE presets | `Lfe.AgentOs.LfePreset` future | experimental preset | should remain replaceable |
 
 ---
 

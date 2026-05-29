@@ -43,7 +43,7 @@ public static class PaneReplace
             return new SpawnPaneResult(false);
         }
 
-        var title = $"omo-subagent-{description[..Math.Min(description.Length, 20)]}";
+        var title = $"lfe-subagent-{description[..Math.Min(description.Length, 20)]}";
         await runTmuxCommandAsync(tmux, ["select-pane", "-t", paneId, "-T", title], null, cancellationToken);
         return new SpawnPaneResult(true, paneId);
     }

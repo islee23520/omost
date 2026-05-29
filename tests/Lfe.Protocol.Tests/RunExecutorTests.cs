@@ -31,7 +31,7 @@ public sealed class RunExecutorTests
             RunId = "run-phase1",
             SessionId = "session-phase1",
             Prompt = "Hello from Phase 1.",
-            Agent = "omots-agent",
+            Agent = "lfets-agent",
             Model = "gpt-5.4",
             ContinuationToken = "continue-123",
         }, CancellationToken.None);
@@ -39,23 +39,23 @@ public sealed class RunExecutorTests
         Assert.True(accepted.Accepted);
         Assert.Equal("run-phase1", accepted.RunId);
 
-        var terminal = await notifications.WaitForAsync(OmoNotificationNames.RunResult, "run-phase1");
-        Assert.Equal(OmoRunStatusValues.Completed, terminal.Params.GetProperty("status").GetString());
+        var terminal = await notifications.WaitForAsync(LfeNotificationNames.RunResult, "run-phase1");
+        Assert.Equal(LfeRunStatusValues.Completed, terminal.Params.GetProperty("status").GetString());
         Assert.Equal("session-phase1", terminal.Params.GetProperty("finalSessionId").GetString());
         Assert.Equal("Completed Phase 1 run: Hello from Phase 1.", terminal.Params.GetProperty("outputText").GetString());
 
         var outputJson = terminal.Params.GetProperty("outputJson");
-        Assert.Equal("omots-agent", outputJson.GetProperty("agent").GetString());
+        Assert.Equal("lfets-agent", outputJson.GetProperty("agent").GetString());
         Assert.Equal("gpt-5.4", outputJson.GetProperty("model").GetString());
         Assert.Equal("continue-123", outputJson.GetProperty("continuationToken").GetString());
 
         Assert.Equal(new[]
         {
-            OmoRunPhaseValues.Queued,
-            OmoRunPhaseValues.Running,
-            OmoRunPhaseValues.Completed,
+            LfeRunPhaseValues.Queued,
+            LfeRunPhaseValues.Running,
+            LfeRunPhaseValues.Completed,
         }, notifications.Notifications
-            .Where(static notification => notification.Method == OmoNotificationNames.RunProgress)
+            .Where(static notification => notification.Method == LfeNotificationNames.RunProgress)
             .Select(static notification => notification.Params.GetProperty("phase").GetString())
             .ToArray());
     }
@@ -111,7 +111,7 @@ public sealed class RunExecutorTests
         Assert.Equal("run-handler", dispatchResult.RunId);
         Assert.True(dispatchResult.Accepted);
         Assert.Equal("run-handler", cancelResult.RunId);
-        Assert.Equal(OmoRunStatusValues.Cancelled, cancelResult.Status);
+        Assert.Equal(LfeRunStatusValues.Cancelled, cancelResult.Status);
         Assert.Equal("run-handler", executor.LastDispatchRequest?.RunId);
         Assert.Equal("session-handler", executor.LastDispatchRequest?.SessionId);
         Assert.Equal("Handler prompt", executor.LastDispatchRequest?.Prompt);
@@ -153,7 +153,7 @@ public sealed class RunExecutorTests
         return JsonSerializer.SerializeToElement(value, JsonRpcProtocol.SerializerOptions);
     }
 
-    private sealed class CapturingRunExecutor : IOmoRunExecutor
+    private sealed class CapturingRunExecutor : ILfeRunExecutor
     {
         public string? LastCancelReason { get; private set; }
 
@@ -161,24 +161,24 @@ public sealed class RunExecutorTests
 
         public RunDispatchRequestParams? LastDispatchRequest { get; private set; }
 
-        public Task<OmoRunAccepted> DispatchAsync(RunDispatchRequestParams request, CancellationToken ct)
+        public Task<LfeRunAccepted> DispatchAsync(RunDispatchRequestParams request, CancellationToken ct)
         {
             LastDispatchRequest = request;
-            return Task.FromResult(new OmoRunAccepted
+            return Task.FromResult(new LfeRunAccepted
             {
                 Accepted = true,
                 RunId = request.RunId,
             });
         }
 
-        public Task<OmoCancelResult> CancelAsync(string runId, string? reason, CancellationToken ct)
+        public Task<LfeCancelResult> CancelAsync(string runId, string? reason, CancellationToken ct)
         {
             LastCancelRunId = runId;
             LastCancelReason = reason;
-            return Task.FromResult(new OmoCancelResult
+            return Task.FromResult(new LfeCancelResult
             {
                 RunId = runId,
-                Status = OmoRunStatusValues.Cancelled,
+                Status = LfeRunStatusValues.Cancelled,
             });
         }
     }

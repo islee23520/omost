@@ -6,6 +6,6 @@ public sealed class ToolNameTests
     public void Transform_maps_special_tools_and_pascalizes()
     {
         Assert.Equal("WebFetch", ToolName.Transform(" webfetch "));
-        Assert.Equal("CallOmoAgent", ToolName.Transform("call-omo-agent"));
+        Assert.Equal("CallLfeAgent", ToolName.Transform("call-lfe-agent"));
     }
 }

@@ -18,7 +18,7 @@ public sealed class Phase1ConformanceTests
         var response = await harness.SendRequestAsync(LoadNode("protocol-fixtures/phase1/initialize.request.json"), splitAt: 32);
 
         var expected = LoadNode("protocol-fixtures/phase1/initialize.response.json").DeepClone();
-        expected["result"]!["implementationName"] = OmoProtocolInfo.ImplementationName;
+        expected["result"]!["implementationName"] = LfeProtocolInfo.ImplementationName;
 
         AssertJsonEqual(expected, response);
     }
@@ -33,7 +33,7 @@ public sealed class Phase1ConformanceTests
             {
               "jsonrpc": "2.0",
               "id": 1,
-              "method": "omo.initialize",
+              "method": "lfe.initialize",
               "params": {
                 "protocolVersion": "9.9.9",
                 "hostName": "opencode",
@@ -45,7 +45,7 @@ public sealed class Phase1ConformanceTests
             """)!);
 
         AssertJsonEqual(LoadNode("protocol-fixtures/phase1/error.version-mismatch.response.json"), response);
-        AssertJsonEqual(LoadNode(".omo/evidence/task-11-lfe-version-mismatch.json"), response);
+        AssertJsonEqual(LoadNode(".lfe/evidence/task-11-lfe-version-mismatch.json"), response);
     }
 
     [Fact]
@@ -70,21 +70,21 @@ public sealed class Phase1ConformanceTests
         await harness.WaitForTerminalAsync("run-phase1");
 
         var transcript = harness.CreateTranscriptNode();
-        AssertJsonEqual(LoadNode(".omo/evidence/task-11-lfe-phase1-success.json"), transcript);
+        AssertJsonEqual(LoadNode(".lfe/evidence/task-11-lfe-phase1-success.json"), transcript);
 
         AssertJsonEqual(LoadNode("protocol-fixtures/golden/lfe-phase1-success.json"), transcript);
 
         var progressMessages = harness.ServerMessages
-            .Where(message => string.Equals(message["method"]?.GetValue<string>(), OmoNotificationNames.RunProgress, StringComparison.Ordinal))
+            .Where(message => string.Equals(message["method"]?.GetValue<string>(), LfeNotificationNames.RunProgress, StringComparison.Ordinal))
             .ToArray();
 
         Assert.Equal(3, progressMessages.Length);
         Assert.Equal(
-            new[] { OmoRunPhaseValues.Queued, OmoRunPhaseValues.Running, OmoRunPhaseValues.Completed },
+            new[] { LfeRunPhaseValues.Queued, LfeRunPhaseValues.Running, LfeRunPhaseValues.Completed },
             progressMessages.Select(message => message["params"]!["phase"]!.GetValue<string>()).ToArray());
 
-        Assert.Equal(OmoNotificationNames.RunResult, harness.ServerMessages.Last()["method"]!.GetValue<string>());
-        Assert.Equal(OmoRunStatusValues.Completed, harness.ServerMessages.Last()["params"]!["status"]!.GetValue<string>());
+        Assert.Equal(LfeNotificationNames.RunResult, harness.ServerMessages.Last()["method"]!.GetValue<string>());
+        Assert.Equal(LfeRunStatusValues.Completed, harness.ServerMessages.Last()["params"]!["status"]!.GetValue<string>());
     }
 
     [Fact]
@@ -99,12 +99,12 @@ public sealed class Phase1ConformanceTests
             {
               "jsonrpc": "2.0",
               "id": 3,
-              "method": "omo.run.dispatch",
+              "method": "lfe.run.dispatch",
               "params": {
                 "runId": "run-cancel",
                 "sessionId": "session-phase1",
                 "prompt": "Cancel this Phase 1 run.",
-                "agent": "omots-agent",
+            "agent": "lfets-agent",
                 "model": "gpt-5.4",
                 "continuationToken": "continue-cancel"
               }
@@ -117,9 +117,9 @@ public sealed class Phase1ConformanceTests
         AssertJsonEqual(LoadNode("protocol-fixtures/phase1/run.cancel.response.json"), cancelResponse);
 
         var terminal = harness.ServerMessages.Last(message =>
-            string.Equals(message["method"]?.GetValue<string>(), OmoNotificationNames.RunResult, StringComparison.Ordinal));
+            string.Equals(message["method"]?.GetValue<string>(), LfeNotificationNames.RunResult, StringComparison.Ordinal));
 
-        Assert.Equal(OmoRunStatusValues.Cancelled, terminal["params"]!["status"]!.GetValue<string>());
+        Assert.Equal(LfeRunStatusValues.Cancelled, terminal["params"]!["status"]!.GetValue<string>());
         Assert.Equal("Run cancelled: User requested cancellation", terminal["params"]!["outputText"]!.GetValue<string>());
         AssertJsonEqual(LoadNode("protocol-fixtures/golden/phase1-cancel.json")["transcript"]![(int)7]!["message"]!, cancelResponse);
     }
@@ -129,25 +129,25 @@ public sealed class Phase1ConformanceTests
     {
         Assert.Equal(new[]
         {
-            "omo.initialize",
-            "omo.session.start",
-            "omo.run.dispatch",
-            "omo.run.cancel",
-        }, OmoMethodNames.All);
+            "lfe.initialize",
+            "lfe.session.start",
+            "lfe.run.dispatch",
+            "lfe.run.cancel",
+        }, LfeMethodNames.All);
 
         Assert.Equal(new[]
         {
-            "omo.run.progress",
-            "omo.run.result",
-            "omo.run.error",
-        }, OmoNotificationNames.All);
+            "lfe.run.progress",
+            "lfe.run.result",
+            "lfe.run.error",
+        }, LfeNotificationNames.All);
 
         Assert.Equal(-32600, ErrorCode.InvalidRequest);
         Assert.Equal(-32001, ErrorCode.VersionMismatch);
         Assert.Equal(-32010, ErrorCode.RunFailure);
-        Assert.Equal("OMO_INVALID_REQUEST", OmoErrorCode.InvalidRequest);
-        Assert.Equal("OMO_VERSION_MISMATCH", OmoErrorCode.VersionMismatch);
-        Assert.Equal("OMO_RUN_FAILED", OmoErrorCode.RunFailed);
+        Assert.Equal("LFE_INVALID_REQUEST", LfeErrorCode.InvalidRequest);
+        Assert.Equal("LFE_VERSION_MISMATCH", LfeErrorCode.VersionMismatch);
+        Assert.Equal("LFE_RUN_FAILED", LfeErrorCode.RunFailed);
     }
 
     private static void AssertJsonEqual(JsonNode? expected, JsonNode? actual)
@@ -250,10 +250,10 @@ public sealed class Phase1ConformanceTests
             {
                 DrainOutput();
                 if (ServerMessages.Any(message =>
-                        string.Equals(message["method"]?.GetValue<string>(), OmoNotificationNames.RunResult, StringComparison.Ordinal) &&
+                        string.Equals(message["method"]?.GetValue<string>(), LfeNotificationNames.RunResult, StringComparison.Ordinal) &&
                         string.Equals(message["params"]?["runId"]?.GetValue<string>(), runId, StringComparison.Ordinal)) ||
                     ServerMessages.Any(message =>
-                        string.Equals(message["method"]?.GetValue<string>(), OmoNotificationNames.RunError, StringComparison.Ordinal) &&
+                        string.Equals(message["method"]?.GetValue<string>(), LfeNotificationNames.RunError, StringComparison.Ordinal) &&
                         string.Equals(message["params"]?["runId"]?.GetValue<string>(), runId, StringComparison.Ordinal)))
                 {
                     return;

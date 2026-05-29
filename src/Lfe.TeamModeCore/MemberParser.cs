@@ -74,7 +74,7 @@ public static class MemberParser
         ["prometheus"] = new()
         {
             Verdict = AgentEligibilityVerdict.HardReject,
-            RejectionMessage = "Agent 'prometheus' is plan-mode-only; can only write to .omo/*.md (enforced by prometheusMdOnly hook). Cannot write to team mailbox. Use delegate-task with subagent_type: 'plan' instead.",
+            RejectionMessage = "Agent 'prometheus' is plan-mode-only; can only write to .lfe/*.md (enforced by prometheusMdOnly hook). Cannot write to team mailbox. Use delegate-task with subagent_type: 'plan' instead.",
         },
         ["sisyphus-junior"] = new() { Verdict = AgentEligibilityVerdict.Eligible },
     };

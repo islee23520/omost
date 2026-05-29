@@ -49,8 +49,8 @@ Codex plugin packaging is supported through manifests and MCP server declaration
 - Transport: stdio only.
 - Envelope: JSON-RPC 2.0.
 - Framing: `Content-Length` headers.
-- Frozen methods: `omo.initialize`, `omo.session.start`, `omo.run.dispatch`, `omo.run.cancel`.
-- Frozen notifications: `omo.run.progress`, `omo.run.result`, `omo.run.error`.
+- Frozen methods: `lfe.initialize`, `lfe.session.start`, `lfe.run.dispatch`, `lfe.run.cancel`.
+- Frozen notifications: `lfe.run.progress`, `lfe.run.result`, `lfe.run.error`.
 
 ## Packaging notes
 

@@ -8,13 +8,13 @@ using Lfe.UlwLoopState;
 
 namespace Lfe.StandaloneRuntime;
 
-public sealed class StandaloneOmoRuntime
+public sealed class StandaloneLfeRuntime
 {
     public IUlwHost Host { get; }
     public UlwLoopStateController LoopState { get; }
     public IUlwLoopEngine Engine { get; }
     public List<BuiltinSkill> Skills { get; }
-    public List<OmoHookDefinition> Hooks { get; }
+    public List<LfeHookDefinition> Hooks { get; }
     public List<PortableToolDefinition> Tools { get; }
     public List<string> SkillMcpServerNames { get; }
     public List<UlwPromptRequest> DispatchedPrompts { get; }
@@ -23,12 +23,12 @@ public sealed class StandaloneOmoRuntime
     private readonly Dictionary<string, List<TodoItem>> _todosBySession;
     private readonly HashSet<Action<UlwSessionEvent>> _listeners;
 
-    private StandaloneOmoRuntime(
+    private StandaloneLfeRuntime(
         IUlwHost host,
         UlwLoopStateController loopState,
         IUlwLoopEngine engine,
         List<BuiltinSkill> skills,
-        List<OmoHookDefinition> hooks,
+        List<LfeHookDefinition> hooks,
         List<PortableToolDefinition> tools,
         List<string> skillMcpServerNames,
         List<UlwPromptRequest> dispatchedPrompts,
@@ -49,7 +49,7 @@ public sealed class StandaloneOmoRuntime
         _listeners = listeners;
     }
 
-    public static StandaloneOmoRuntime Create(PortableToolRuntimeOptions? toolRuntime = null)
+    public static StandaloneLfeRuntime Create(PortableToolRuntimeOptions? toolRuntime = null)
     {
         var dispatchedPrompts = new List<UlwPromptRequest>();
         var messagesBySession = new Dictionary<string, List<UlwMessage>>();
@@ -60,7 +60,7 @@ public sealed class StandaloneOmoRuntime
 
         var loopState = new UlwLoopStateController(new MemoryUlwLoopStateStore());
         var skills = SkillCatalog.CreateBuiltinSkills(new CreateBuiltinSkillsOptions(TeamModeEnabled: true));
-        var hooks = HookDefinitions.ListOmoHooks();
+        var hooks = HookDefinitions.ListLfeHooks();
         var baseTools = PortableTools.CreatePortableTools(toolRuntime);
         var skillMcpSkillLikes = skills.Select(s => new SkillMcpSkillLike(
             s.Name,
@@ -76,7 +76,7 @@ public sealed class StandaloneOmoRuntime
 
         var engine = UlwKernelRuntime.CreateUlwLoopEngine(new UlwLoopEngineOptions(host, loopState));
 
-        return new StandaloneOmoRuntime(host, loopState, engine, skills, hooks, tools, skillMcpServerNames, dispatchedPrompts,
+        return new StandaloneLfeRuntime(host, loopState, engine, skills, hooks, tools, skillMcpServerNames, dispatchedPrompts,
             messagesBySession, todosBySession, listeners);
     }
 

@@ -23,11 +23,11 @@ public sealed class ContentLengthFramingTests
             stream,
             new JsonRpcNotificationMessage<RunProgressParams>
             {
-                Method = OmoNotificationNames.RunProgress,
+                Method = LfeNotificationNames.RunProgress,
                 Params = new RunProgressParams
                 {
                     Message = "Working",
-                    Phase = OmoRunPhaseValues.Running,
+                    Phase = LfeRunPhaseValues.Running,
                     RunId = "run-1",
                 },
             },
@@ -40,7 +40,7 @@ public sealed class ContentLengthFramingTests
         Assert.NotNull(body);
         using var document = JsonDocument.Parse(body!);
         Assert.Equal("2.0", document.RootElement.GetProperty("jsonrpc").GetString());
-        Assert.Equal("omo.run.progress", document.RootElement.GetProperty("method").GetString());
+        Assert.Equal("lfe.run.progress", document.RootElement.GetProperty("method").GetString());
         Assert.Equal("run-1", document.RootElement.GetProperty("params").GetProperty("runId").GetString());
     }
 }

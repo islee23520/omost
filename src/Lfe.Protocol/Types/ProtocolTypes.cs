@@ -3,34 +3,34 @@ using System.Text.Json.Serialization;
 
 namespace Lfe.Protocol.Types;
 
-public static class OmoProtocolInfo
+public static class LfeProtocolInfo
 {
     public const string ImplementationName = "lfe";
     public const string ProtocolVersion = "1.0.0";
 }
 
-public static class OmoMethodNames
+public static class LfeMethodNames
 {
-    public const string Initialize = "omo.initialize";
-    public const string SessionStart = "omo.session.start";
-    public const string RunDispatch = "omo.run.dispatch";
-    public const string RunCancel = "omo.run.cancel";
+    public const string Initialize = "lfe.initialize";
+    public const string SessionStart = "lfe.session.start";
+    public const string RunDispatch = "lfe.run.dispatch";
+    public const string RunCancel = "lfe.run.cancel";
 
     public static IReadOnlyList<string> All { get; } =
         new[] { Initialize, SessionStart, RunDispatch, RunCancel };
 }
 
-public static class OmoNotificationNames
+public static class LfeNotificationNames
 {
-    public const string RunProgress = "omo.run.progress";
-    public const string RunResult = "omo.run.result";
-    public const string RunError = "omo.run.error";
+    public const string RunProgress = "lfe.run.progress";
+    public const string RunResult = "lfe.run.result";
+    public const string RunError = "lfe.run.error";
 
     public static IReadOnlyList<string> All { get; } =
         new[] { RunProgress, RunResult, RunError };
 }
 
-public static class OmoCapabilityNames
+public static class LfeCapabilityNames
 {
     public const string Initialize = "phase1.initialize";
     public const string SessionStart = "phase1.session-start";
@@ -43,7 +43,7 @@ public static class OmoCapabilityNames
         new[] { Initialize, SessionStart, RunDispatch, RunProgress, RunResult, RunCancel };
 }
 
-public static class OmoClientKinds
+public static class LfeClientKinds
 {
     public const string HostBridge = "host-bridge";
     public const string ImplementationToolkit = "implementation-toolkit";
@@ -55,13 +55,13 @@ public static class OmoClientKinds
     }
 }
 
-public static class OmoServerModes
+public static class LfeServerModes
 {
     public const string Standalone = "standalone";
     public const string Bridge = "bridge";
 }
 
-public static class OmoRunPhaseValues
+public static class LfeRunPhaseValues
 {
     public const string Queued = "queued";
     public const string Running = "running";
@@ -74,7 +74,7 @@ public static class OmoRunPhaseValues
         new[] { Queued, Running, Tool, Completed, Failed, Cancelled };
 }
 
-public static class OmoRunStatusValues
+public static class LfeRunStatusValues
 {
     public const string Completed = "completed";
     public const string Failed = "failed";
@@ -121,7 +121,7 @@ public sealed record InitializeResult
     public string[] AcceptedCapabilities { get; init; } = Array.Empty<string>();
 
     [JsonPropertyName("serverMode")]
-    public string ServerMode { get; init; } = OmoServerModes.Standalone;
+    public string ServerMode { get; init; } = LfeServerModes.Standalone;
 }
 
 public sealed record SessionStartRequestParams
@@ -199,7 +199,7 @@ public sealed record RunCancelResult
     public string RunId { get; init; } = string.Empty;
 
     [JsonPropertyName("status")]
-    public string Status { get; init; } = OmoRunStatusValues.Cancelled;
+    public string Status { get; init; } = LfeRunStatusValues.Cancelled;
 }
 
 public sealed record RunProgressParams
@@ -208,7 +208,7 @@ public sealed record RunProgressParams
     public string RunId { get; init; } = string.Empty;
 
     [JsonPropertyName("phase")]
-    public string Phase { get; init; } = OmoRunPhaseValues.Queued;
+    public string Phase { get; init; } = LfeRunPhaseValues.Queued;
 
     [JsonPropertyName("message")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -229,7 +229,7 @@ public sealed record RunResultParams
     public string RunId { get; init; } = string.Empty;
 
     [JsonPropertyName("status")]
-    public string Status { get; init; } = OmoRunStatusValues.Completed;
+    public string Status { get; init; } = LfeRunStatusValues.Completed;
 
     [JsonPropertyName("outputText")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

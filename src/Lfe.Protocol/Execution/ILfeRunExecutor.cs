@@ -3,9 +3,9 @@ using Lfe.Protocol.Types;
 namespace Lfe.Protocol.Execution;
 
 /// <summary>
-/// Defines the contract for executing OMO runs.
+/// Defines the contract for executing LFE runs.
 /// </summary>
-public interface IOmoRunExecutor
+public interface ILfeRunExecutor
 {
     /// <summary>
     /// Dispatches a run request asynchronously.
@@ -13,7 +13,7 @@ public interface IOmoRunExecutor
     /// <param name="request">The run dispatch request parameters.</param>
     /// <param name="ct">The cancellation token.</param>
     /// <returns>A task representing the asynchronous operation, containing the run acceptance result.</returns>
-    Task<OmoRunAccepted> DispatchAsync(RunDispatchRequestParams request, CancellationToken ct);
+    Task<LfeRunAccepted> DispatchAsync(RunDispatchRequestParams request, CancellationToken ct);
 
     /// <summary>
     /// Cancels an active run asynchronously.
@@ -22,13 +22,13 @@ public interface IOmoRunExecutor
     /// <param name="reason">The optional reason for cancellation.</param>
     /// <param name="ct">The cancellation token.</param>
     /// <returns>A task representing the asynchronous operation, containing the cancellation result.</returns>
-    Task<OmoCancelResult> CancelAsync(string runId, string? reason, CancellationToken ct);
+    Task<LfeCancelResult> CancelAsync(string runId, string? reason, CancellationToken ct);
 }
 
 /// <summary>
 /// Represents the result of a run dispatch request being accepted.
 /// </summary>
-public sealed record OmoRunAccepted
+public sealed record LfeRunAccepted
 {
     /// <summary>
     /// Gets the identifier of the run.
@@ -44,7 +44,7 @@ public sealed record OmoRunAccepted
 /// <summary>
 /// Represents the result of a run cancellation request.
 /// </summary>
-public sealed record OmoCancelResult
+public sealed record LfeCancelResult
 {
     /// <summary>
     /// Gets the identifier of the run.
@@ -54,5 +54,5 @@ public sealed record OmoCancelResult
     /// <summary>
     /// Gets the status of the run after cancellation.
     /// </summary>
-    public string Status { get; init; } = OmoRunStatusValues.Cancelled;
+    public string Status { get; init; } = LfeRunStatusValues.Cancelled;
 }

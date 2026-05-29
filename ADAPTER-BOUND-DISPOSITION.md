@@ -1,6 +1,6 @@
 # Adapter-Bound Feature Disposition
 
-Features and shared utilities from the original OMO plugin that are explicitly excluded from the standalone core because they depend on OpenCode/Claude Code plugin APIs.
+Features and shared utilities from the original LFE plugin that are explicitly excluded from the standalone core because they depend on OpenCode/Claude Code plugin APIs.
 
 Original documentation-only files `/Users/ilseoblee/.config/opencode/plugins/omo/src/features/AGENTS.md` and `/Users/ilseoblee/.config/opencode/plugins/omo/src/shared/AGENTS.md` are explicitly excluded from runtime parity. They are repository guidance docs, not executable standalone functionality.
 
@@ -269,7 +269,7 @@ To satisfy the skeptical verification requirements of the Oracle review system, 
 ### 4. Telemetry and Analytics Tracking
 * **Files:** `posthog.ts`, `posthog-activity-state.ts`
 * **Disposition:** Excluded / Runtime-only.
-* **Explanation:** Omo standalone core is designed to be completely telemetry-free. All PostHog analytics captures and client metrics trackers are omitted to focus on a lightweight, privacy-respecting runtime.
+* **Explanation:** Lfe standalone core is designed to be completely telemetry-free. All PostHog analytics captures and client metrics trackers are omitted to focus on a lightweight, privacy-respecting runtime.
 
 ### 5. Live Server and Tool State Interactions
 * **Files:** `opencode-http-api.ts`, `prompt-tools.ts`

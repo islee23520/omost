@@ -54,13 +54,13 @@ public interface ICodexConversationClient
 
 #endregion
 
-public sealed class CodexComposedOmoRuntime
+public sealed class CodexComposedLfeRuntime
 {
     public IUlwHost Host { get; }
     public UlwLoopStateController LoopState { get; }
     public IUlwLoopEngine Engine { get; }
     public List<BuiltinSkill> Skills { get; }
-    public List<OmoHookDefinition> Hooks { get; }
+    public List<LfeHookDefinition> Hooks { get; }
     public List<HookSlashCommandInfo> SlashCommands { get; }
     public List<PortableToolDefinition> Tools { get; }
     public List<string> SkillMcpServerNames { get; }
@@ -68,12 +68,12 @@ public sealed class CodexComposedOmoRuntime
 
     private readonly ICodexConversationClient? _client;
 
-    private CodexComposedOmoRuntime(
+    private CodexComposedLfeRuntime(
         IUlwHost host,
         UlwLoopStateController loopState,
         IUlwLoopEngine engine,
         List<BuiltinSkill> skills,
-        List<OmoHookDefinition> hooks,
+        List<LfeHookDefinition> hooks,
         List<HookSlashCommandInfo> slashCommands,
         List<PortableToolDefinition> tools,
         List<string> skillMcpServerNames,
@@ -96,7 +96,7 @@ public sealed class CodexComposedOmoRuntime
     /// Canonical composition path — uses the CodexAdapter spawn+JSONL transport
     /// to drive a real Codex CLI process. This is the recommended entrypoint.
     /// </summary>
-    public static CodexComposedOmoRuntime CreateFromAdapter(CodexAdapterOptions options)
+    public static CodexComposedLfeRuntime CreateFromAdapter(CodexAdapterOptions options)
     {
         var runtime = CodexAdapterFactory.Create(options);
         return Compose(runtime.Host, client: null, runtime);
@@ -106,14 +106,14 @@ public sealed class CodexComposedOmoRuntime
     /// Legacy composition path — requires an external ICodexConversationClient implementation.
     /// Retained for backward compatibility; prefer <see cref="CreateFromAdapter"/> for new code.
     /// </summary>
-    public static CodexComposedOmoRuntime Create(ICodexConversationClient client)
+    public static CodexComposedLfeRuntime Create(ICodexConversationClient client)
     {
         var dispatchedPrompts = new List<UlwPromptRequest>();
         IUlwHost host = new CodexUlwHost(client, dispatchedPrompts);
         return Compose(host, client, adapterRuntime: null);
     }
 
-    private static CodexComposedOmoRuntime Compose(
+    private static CodexComposedLfeRuntime Compose(
         IUlwHost host,
         ICodexConversationClient? client,
         global::Lfe.CodexAdapter.CodexAdapterRuntime? adapterRuntime)
@@ -121,7 +121,7 @@ public sealed class CodexComposedOmoRuntime
         var loopState = new UlwLoopStateController(new MemoryUlwLoopStateStore());
         var engine = UlwKernelRuntime.CreateUlwLoopEngine(new UlwLoopEngineOptions(host, loopState));
         var skills = SkillCatalog.CreateBuiltinSkills(new CreateBuiltinSkillsOptions(TeamModeEnabled: true));
-        var hooks = HookDefinitions.ListOmoHooks();
+        var hooks = HookDefinitions.ListLfeHooks();
         var slashCommands = Discovery.ToHookSlashCommandInfos(Discovery.DiscoverSlashCommandsSync());
         var baseTools = PortableTools.CreatePortableTools();
         var skillMcpSkillLikes = skills.Select(s => new SkillMcpSkillLike(
@@ -136,7 +136,7 @@ public sealed class CodexComposedOmoRuntime
         var tools = baseTools.Append(skillMcpTool).ToList();
         var skillMcpServerNames = PortableSkillMcp.ListPortableSkillMcpServers(skillMcpSkillLikes);
 
-        return new CodexComposedOmoRuntime(
+        return new CodexComposedLfeRuntime(
             host, loopState, engine, skills, hooks, slashCommands,
             tools, skillMcpServerNames, [], client);
     }
@@ -220,7 +220,7 @@ public sealed class CodexComposedOmoRuntime
 }
 
 /// <summary>
-/// Codex-specific IUlwHost adapter that translates between Codex client and omo protocol.
+    /// Codex-specific IUlwHost adapter that translates between Codex client and lfe protocol.
 /// </summary>
 file sealed class CodexUlwHost : IUlwHost
 {

@@ -29,10 +29,10 @@ public sealed class SessionPaneOperationsTests
 
         Assert.Equal(new SpawnPaneResult(true, "%42"), result);
         Assert.Equal(new[] { "display", "-p", "-t", "%0", "#{window_width},#{window_height}" }, calls[0].Args);
-        Assert.Equal(new[] { "has-session", "-t", "omo-agents-999-mgr" }, calls[1].Args);
-        Assert.Equal(new[] { "new-session", "-d", "-s", "omo-agents-999-mgr", "-x", "120", "-y", "40" }, calls[2].Args.Take(8));
+        Assert.Equal(new[] { "has-session", "-t", "lfe-agents-999-mgr" }, calls[1].Args);
+        Assert.Equal(new[] { "new-session", "-d", "-s", "lfe-agents-999-mgr", "-x", "120", "-y", "40" }, calls[2].Args.Take(8));
         Assert.Contains("Focus this pane to attach.", calls[2].Args.Last());
-        Assert.Equal(new[] { "select-pane", "-t", "%42", "-T", "omo-subagent-worker" }, calls[3].Args);
+        Assert.Equal(new[] { "select-pane", "-t", "%42", "-T", "lfe-subagent-worker" }, calls[3].Args);
     }
 
     [Fact]
@@ -60,7 +60,7 @@ public sealed class SessionPaneOperationsTests
         Assert.Equal(new SpawnPaneResult(true, "%42"), result);
         Assert.Equal(new[] { "split-window", "-h", "-d", "-P", "-F", "#{pane_id}", "-t", "%0" }, calls[0].Take(8));
         Assert.Contains("Focus this pane to attach.", calls[0].Last());
-        Assert.Equal(new[] { "select-pane", "-t", "%42", "-T", "omo-subagent-worker" }, calls[1]);
+        Assert.Equal(new[] { "select-pane", "-t", "%42", "-T", "lfe-subagent-worker" }, calls[1]);
     }
 
     [Fact]
@@ -89,6 +89,6 @@ public sealed class SessionPaneOperationsTests
         Assert.Equal(new[] { "send-keys", "-t", "%42", "C-c" }, calls[0]);
         Assert.Equal(new[] { "respawn-pane", "-k", "-t", "%42" }, calls[1].Take(4));
         Assert.Contains("Focus this pane to attach.", calls[1].Last());
-        Assert.Equal(new[] { "select-pane", "-t", "%42", "-T", "omo-subagent-worker" }, calls[2]);
+        Assert.Equal(new[] { "select-pane", "-t", "%42", "-T", "lfe-subagent-worker" }, calls[2]);
     }
 }

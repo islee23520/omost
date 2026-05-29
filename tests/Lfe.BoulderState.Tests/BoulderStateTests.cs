@@ -15,10 +15,10 @@ public sealed class BoulderStateTests : IDisposable
     [Fact]
     public void Constants_are_stable()
     {
-        Assert.Equal(".omo/boulder", Constants.BOULDER_DIR);
+        Assert.Equal(".lfe/boulder", Constants.BOULDER_DIR);
         Assert.Equal("state.json", Constants.BOULDER_FILE);
-        Assert.Equal(".omo/boulder/state.json", Constants.BOULDER_STATE_PATH);
-        Assert.Equal(".omo/plans", Constants.PROMETHEUS_PLANS_DIR);
+        Assert.Equal(".lfe/boulder/state.json", Constants.BOULDER_STATE_PATH);
+        Assert.Equal(".lfe/plans", Constants.PROMETHEUS_PLANS_DIR);
     }
 
     [Fact]

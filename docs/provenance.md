@@ -1,11 +1,11 @@
 # Provenance
 
-This workspace was bootstrapped from the local OMO plugin source as the first
+This workspace was bootstrapped from the local LFE plugin source as the first
 milestone for a standalone ULW extraction.
 
 ## Source
 
-- Path: local OMO plugin source outside this repository
+- Path: local LFE plugin source outside this repository
 - Branch: `feat/gorkphus`
 - Commit: `aa5f38da22b8e4203898f6be0a8733f16cddb5af`
 
@@ -16,9 +16,9 @@ milestone for a standalone ULW extraction.
 
 ## Evolution
 
-1. **Initial import**: TypeScript packages under `packages/*` with `omots/` toolkit
+1. **Initial import**: TypeScript packages under `packages/*` with `lfets/` toolkit
 2. **Conversion**: All 27 TypeScript packages converted to .NET under `lfe/src/`
-3. **Consolidation**: TypeScript runtime surfaces (`omots/`, `packages/`, `hosts/`) removed in one-shot cutover
+3. **Consolidation**: TypeScript runtime surfaces (`lfets/`, `packages/`, `hosts/`) removed in one-shot cutover
 4. **Codex integration**: `Lfe.CodexMcpBridge` delivered as MCP-compatible tool server
 
 ## Current Layout
@@ -34,4 +34,4 @@ milestone for a standalone ULW extraction.
 - `node_modules/`
 - Platform binary packages
 - Marketing web app
-- Source runtime state from `.omo/`
+- Source runtime state from `.lfe/`

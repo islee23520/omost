@@ -13,6 +13,6 @@ public sealed class ErrorEmitter
 
     public Task EmitAsync(RunErrorParams parameters, CancellationToken cancellationToken = default)
     {
-        return _notificationEmitter.EmitAsync(OmoNotificationNames.RunError, parameters, cancellationToken);
+        return _notificationEmitter.EmitAsync(LfeNotificationNames.RunError, parameters, cancellationToken);
     }
 }

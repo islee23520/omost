@@ -9,7 +9,7 @@ public sealed record WindowSpawnDependencies(
 
 public static class WindowSpawn
 {
-    private const string IsolatedWindowName = "omo-agents";
+    private const string IsolatedWindowName = "lfe-agents";
 
     public static async Task<SpawnPaneResult> SpawnTmuxWindowAsync(
         string sessionId,
@@ -51,7 +51,7 @@ public static class WindowSpawn
         }
 
         var paneId = result.Output;
-        var title = $"omo-subagent-{description[..Math.Min(description.Length, 20)]}";
+        var title = $"lfe-subagent-{description[..Math.Min(description.Length, 20)]}";
         await runTmuxCommandAsync(tmux, ["select-pane", "-t", paneId, "-T", title], null, cancellationToken);
         return new SpawnPaneResult(true, paneId);
     }

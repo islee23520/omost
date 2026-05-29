@@ -59,7 +59,7 @@ public class UlwHostContractTests
     [Fact]
     public void GetAcceptedCapabilities_FiltersUnsupportedAndDuplicateEntries()
     {
-        var accepted = OmoProtocol.GetAcceptedCapabilities([
+        var accepted = LfeProtocol.GetAcceptedCapabilities([
             "phase1.initialize",
             "phase1.run-progress",
             "phase1.initialize",
@@ -72,20 +72,20 @@ public class UlwHostContractTests
     [Fact]
     public void ParseContentLength_ReturnsParsedLength()
     {
-        var length = OmoProtocol.ParseContentLength("Content-Type: application/json\r\nContent-Length: 42\r\n");
+        var length = LfeProtocol.ParseContentLength("Content-Type: application/json\r\nContent-Length: 42\r\n");
         Assert.Equal(42, length);
     }
 
     [Fact]
     public void CreateContentLengthFrame_UsesUtf8BodyLength()
     {
-        var frame = OmoProtocol.CreateContentLengthFrame(new { message = "한글" });
-        var parts = frame.Split(OmoProtocolConstants.HeaderSeparator);
+        var frame = LfeProtocol.CreateContentLengthFrame(new { message = "한글" });
+        var parts = frame.Split(LfeProtocolConstants.HeaderSeparator);
 
         Assert.Equal(2, parts.Length);
         Assert.Contains("Content-Length: ", parts[0]);
         Assert.Equal(JsonSerializer.Serialize(new { message = "한글" }), parts[1]);
-        Assert.Equal(EncodingUtf8Length(parts[1]), OmoProtocol.ParseContentLength(parts[0] + "\r\n"));
+        Assert.Equal(EncodingUtf8Length(parts[1]), LfeProtocol.ParseContentLength(parts[0] + "\r\n"));
     }
 
     [Fact]
@@ -93,7 +93,7 @@ public class UlwHostContractTests
     {
         Assert.Equal(
             "clientKind must be host-bridge or implementation-toolkit",
-            OmoProtocol.GetInitializeValidationError(new Dictionary<string, object?>
+            LfeProtocol.GetInitializeValidationError(new Dictionary<string, object?>
             {
                 ["protocolVersion"] = "1.0.0",
                 ["hostName"] = "host",
@@ -102,14 +102,14 @@ public class UlwHostContractTests
                 ["requestedCapabilities"] = new[] { "phase1.initialize" },
             }));
 
-        Assert.Null(OmoProtocol.GetRunDispatchValidationError(new Dictionary<string, object?>
+        Assert.Null(LfeProtocol.GetRunDispatchValidationError(new Dictionary<string, object?>
         {
             ["runId"] = "run-1",
             ["sessionId"] = "ses-1",
             ["prompt"] = "ship it",
         }));
 
-        Assert.Equal("reason must be a non-empty string", OmoProtocol.GetRunCancelValidationError(JsonDocument.Parse("""
+        Assert.Equal("reason must be a non-empty string", LfeProtocol.GetRunCancelValidationError(JsonDocument.Parse("""
             {"runId":"run-1","reason":"   "}
             """).RootElement));
     }
@@ -117,10 +117,10 @@ public class UlwHostContractTests
     [Fact]
     public void TerminalChecks_RecognizeExpectedStates()
     {
-        Assert.True(OmoProtocol.IsTerminalRunLifecycleState(OmotsRunLifecycleState.Completed));
-        Assert.False(OmoProtocol.IsTerminalRunLifecycleState(OmotsRunLifecycleState.Running));
-        Assert.True(OmoProtocol.IsTerminalRunStatus(OmotsRunStatus.Cancelled));
-        Assert.True(OmoProtocol.IsSupportedProtocolVersion("1.0.0"));
+        Assert.True(LfeProtocol.IsTerminalRunLifecycleState(LfetsRunLifecycleState.Completed));
+        Assert.False(LfeProtocol.IsTerminalRunLifecycleState(LfetsRunLifecycleState.Running));
+        Assert.True(LfeProtocol.IsTerminalRunStatus(LfetsRunStatus.Cancelled));
+        Assert.True(LfeProtocol.IsSupportedProtocolVersion("1.0.0"));
     }
 
     private static int EncodingUtf8Length(string value) => System.Text.Encoding.UTF8.GetByteCount(value);

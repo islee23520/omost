@@ -10,7 +10,7 @@ public sealed record CompactionMessage(string? Agent, CompactionMessageInfo? Inf
 
 public static class CompactionMarker
 {
-    public const string DefaultPartStorage = "/tmp/omo/parts";
+    public const string DefaultPartStorage = "/tmp/lfe/parts";
 
     public static bool IsCompactionAgent(string? agent) => string.Equals(agent?.Trim(), "compaction", StringComparison.OrdinalIgnoreCase);
 

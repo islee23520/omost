@@ -8,7 +8,7 @@ public static class RuleConstants
 
     public static readonly (string Parent, string Subdir)[] ProjectRuleSubdirs =
     [
-        (".omo", "rules"),
+        (".lfe", "rules"),
         (".claude", "rules"),
         (".cursor", "rules"),
         (".github", "instructions"),
@@ -16,7 +16,7 @@ public static class RuleConstants
     ];
 
     public static readonly string[] ProjectRuleFiles = [".github/copilot-instructions.md"];
-    public static readonly string[] OpencodeUserRuleDirs = [".omo/rules", ".opencode/rules", ".sisyphus/rules"];
+    public static readonly string[] OpencodeUserRuleDirs = [".lfe/rules", ".opencode/rules", ".sisyphus/rules"];
     public const string UserRuleDir = ".claude/rules";
     public static readonly string[] RuleExtensions = [".md", ".mdc"];
 
@@ -32,13 +32,13 @@ public static class RuleConstants
 
     public static readonly Dictionary<string, int> SourcePriority = new()
     {
-        [".omo/rules"] = 0,
+        [".lfe/rules"] = 0,
         [".claude/rules"] = 1,
         [".cursor/rules"] = 2,
         [".github/instructions"] = 3,
         [".github/copilot-instructions.md"] = 4,
         [".sisyphus/rules"] = 5,
-        ["~/.omo/rules"] = 100,
+        ["~/.lfe/rules"] = 100,
         ["~/.opencode/rules"] = 101,
         ["~/.claude/rules"] = 102,
         ["~/.sisyphus/rules"] = 103,

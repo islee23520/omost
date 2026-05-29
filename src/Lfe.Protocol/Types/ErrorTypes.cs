@@ -4,10 +4,10 @@ using Lfe.Protocol.JsonRpc;
 
 namespace Lfe.Protocol.Types;
 
-public sealed record OmoErrorData
+public sealed record LfeErrorData
 {
-    [JsonPropertyName("omoCode")]
-    public string OmoCode { get; init; } = string.Empty;
+    [JsonPropertyName("lfeCode")]
+    public string LfeCode { get; init; } = string.Empty;
 
     [JsonPropertyName("retryable")]
     public bool Retryable { get; init; }
@@ -23,12 +23,12 @@ public sealed record JsonRpcError
 
     [JsonPropertyName("data")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public OmoErrorData? Data { get; init; }
+    public LfeErrorData? Data { get; init; }
 }
 
-public sealed class OmoProtocolException : Exception
+public sealed class LfeProtocolException : Exception
 {
-    public OmoProtocolException(int code, string message, OmoErrorData? data = null)
+    public LfeProtocolException(int code, string message, LfeErrorData? data = null)
         : base(message)
     {
         Code = code;
@@ -37,7 +37,7 @@ public sealed class OmoProtocolException : Exception
 
     public int Code { get; }
 
-    public OmoErrorData? ErrorData { get; }
+    public LfeErrorData? ErrorData { get; }
 
     public JsonRpcError ToJsonRpcError()
     {
@@ -50,60 +50,60 @@ public sealed class OmoProtocolException : Exception
     }
 }
 
-public static class OmoProtocolErrors
+public static class LfeProtocolErrors
 {
-    public static OmoProtocolException InternalError(string message)
+    public static LfeProtocolException InternalError(string message)
     {
-        return new OmoProtocolException(ErrorCode.InternalError, message);
+        return new LfeProtocolException(ErrorCode.InternalError, message);
     }
 
-    public static OmoProtocolException InvalidParams(string message)
+    public static LfeProtocolException InvalidParams(string message)
     {
-        return new OmoProtocolException(ErrorCode.InvalidParams, message);
+        return new LfeProtocolException(ErrorCode.InvalidParams, message);
     }
 
-    public static OmoProtocolException InvalidRequest(string message)
+    public static LfeProtocolException InvalidRequest(string message)
     {
-        return new OmoProtocolException(
+        return new LfeProtocolException(
             ErrorCode.InvalidRequest,
             message,
-            new OmoErrorData
+            new LfeErrorData
             {
-                OmoCode = OmoErrorCode.InvalidRequest,
+                LfeCode = LfeErrorCode.InvalidRequest,
                 Retryable = false,
             });
     }
 
-    public static OmoProtocolException MethodNotFound(string methodName)
+    public static LfeProtocolException MethodNotFound(string methodName)
     {
-        return new OmoProtocolException(ErrorCode.MethodNotFound, $"Method not found: {methodName}");
+        return new LfeProtocolException(ErrorCode.MethodNotFound, $"Method not found: {methodName}");
     }
 
-    public static OmoProtocolException ParseError(string message)
+    public static LfeProtocolException ParseError(string message)
     {
-        return new OmoProtocolException(ErrorCode.ParseError, message);
+        return new LfeProtocolException(ErrorCode.ParseError, message);
     }
 
-    public static OmoProtocolException RunFailed(string message, bool retryable = false)
+    public static LfeProtocolException RunFailed(string message, bool retryable = false)
     {
-        return new OmoProtocolException(
+        return new LfeProtocolException(
             ErrorCode.RunFailure,
             message,
-            new OmoErrorData
+            new LfeErrorData
             {
-                OmoCode = OmoErrorCode.RunFailed,
+                LfeCode = LfeErrorCode.RunFailed,
                 Retryable = retryable,
             });
     }
 
-    public static OmoProtocolException VersionMismatch(string requestedVersion, string supportedVersion)
+    public static LfeProtocolException VersionMismatch(string requestedVersion, string supportedVersion)
     {
-        return new OmoProtocolException(
+        return new LfeProtocolException(
             ErrorCode.VersionMismatch,
             $"Protocol version mismatch: client {requestedVersion} is not supported",
-            new OmoErrorData
+            new LfeErrorData
             {
-                OmoCode = OmoErrorCode.VersionMismatch,
+                LfeCode = LfeErrorCode.VersionMismatch,
                 Retryable = false,
             });
     }

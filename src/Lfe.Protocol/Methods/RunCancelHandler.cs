@@ -5,10 +5,10 @@ namespace Lfe.Protocol.Methods;
 
 public sealed class RunCancelHandler : MethodHandlerBase<RunCancelRequestParams, RunCancelResult>
 {
-    private readonly IOmoRunExecutor _runExecutor;
+    private readonly ILfeRunExecutor _runExecutor;
 
-    public RunCancelHandler(IOmoRunExecutor runExecutor)
-        : base(OmoMethodNames.RunCancel)
+    public RunCancelHandler(ILfeRunExecutor runExecutor)
+        : base(LfeMethodNames.RunCancel)
     {
         _runExecutor = runExecutor;
     }

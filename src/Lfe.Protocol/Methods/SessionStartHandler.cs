@@ -7,7 +7,7 @@ public sealed class SessionStartHandler : MethodHandlerBase<SessionStartRequestP
     private readonly LfeServerState _serverState;
 
     public SessionStartHandler(LfeServerState serverState)
-        : base(OmoMethodNames.SessionStart)
+        : base(LfeMethodNames.SessionStart)
     {
         _serverState = serverState;
     }

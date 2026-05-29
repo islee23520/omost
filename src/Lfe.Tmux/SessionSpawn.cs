@@ -10,7 +10,7 @@ public sealed record SessionSpawnDependencies(
 
 public static class SessionSpawn
 {
-    private const string IsolatedSessionNamePrefix = "omo-agents";
+    private const string IsolatedSessionNamePrefix = "lfe-agents";
 
     public static string GetIsolatedSessionName(int? processId = null, string? managerId = null)
     {
@@ -76,7 +76,7 @@ public static class SessionSpawn
         }
 
         var paneId = result.Output;
-        var title = $"omo-subagent-{description[..Math.Min(description.Length, 20)]}";
+        var title = $"lfe-subagent-{description[..Math.Min(description.Length, 20)]}";
         await runTmuxCommandAsync(tmux, ["select-pane", "-t", paneId, "-T", title], null, cancellationToken);
         return new SpawnPaneResult(true, paneId);
     }

@@ -80,14 +80,14 @@ public class GitWorktreeTests
     [Fact]
     public void FormatFileChanges_NotepadMatch()
     {
-        var summary = FormatFileChanges.Format([new(".omo/notepads/work/notes.md", 1, 0, GitFileStatus.Modified)], ".omo/notepads/work/notes.md");
+        var summary = FormatFileChanges.Format([new(".lfe/notepads/work/notes.md", 1, 0, GitFileStatus.Modified)], ".lfe/notepads/work/notes.md");
         Assert.Contains("[NOTEPAD UPDATED]", summary);
     }
 
     [Fact]
     public void FormatFileChanges_NotepadNoMatch()
     {
-        var summary = FormatFileChanges.Format([new(".omo/plans/work.md", 1, 0, GitFileStatus.Modified)], ".omo/notepads/work/notes.md");
+        var summary = FormatFileChanges.Format([new(".lfe/plans/work.md", 1, 0, GitFileStatus.Modified)], ".lfe/notepads/work/notes.md");
         Assert.DoesNotContain("[NOTEPAD UPDATED]", summary);
     }
 }

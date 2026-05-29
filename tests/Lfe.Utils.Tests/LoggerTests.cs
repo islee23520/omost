@@ -34,7 +34,7 @@ public sealed class LoggerTests : IDisposable
     {
         Logger.SetLoggerForTesting(new LoggerTestOverrides(Path.Combine(_tempDirectory, "custom.txt"), 10, 1));
         Logger.ResetLoggerForTesting();
-        Assert.Equal(Path.Combine(Path.GetTempPath(), "omo.log"), Logger.GetLogFilePath());
+        Assert.Equal(Path.Combine(Path.GetTempPath(), "lfe.log"), Logger.GetLogFilePath());
     }
 
     public void Dispose()

@@ -1,4 +1,4 @@
-# OMO Stdio + JSON-RPC 2.0 Protocol Specification
+# LFE Stdio + JSON-RPC 2.0 Protocol Specification
 
 **Status:** Frozen  
 **Date:** 2026-05-24  
@@ -17,7 +17,7 @@
 - No network stack required.
 - Simple process lifecycle semantics (parent spawns child, pipes stdin/stdout).
 - Matches existing patterns in LSP (Language Server Protocol) and MCP (Model Context Protocol).
-- Enables cross-runtime interop between `omots` (TypeScript/Bun) and `lfe` (.NET Core) without HTTP/gRPC complexity.
+- Enables cross-runtime interop between `lfets` (TypeScript/Bun) and `lfe` (.NET Core) without HTTP/gRPC complexity.
 
 **Out of scope for Phase 1:**
 - HTTP transport (REST, WebSocket, Server-Sent Events).
@@ -66,7 +66,7 @@ All messages conform to JSON-RPC 2.0.
 {
   "jsonrpc": "2.0",
   "id": 1,
-  "method": "omo.initialize",
+  "method": "lfe.initialize",
   "params": { ... }
 }
 ```
@@ -89,7 +89,7 @@ All messages conform to JSON-RPC 2.0.
     "code": -32600,
     "message": "Invalid Request",
     "data": {
-      "omoCode": "OMO_INVALID_REQUEST",
+      "lfeCode": "LFE_INVALID_REQUEST",
       "retryable": false
     }
   }
@@ -100,7 +100,7 @@ All messages conform to JSON-RPC 2.0.
 ```json
 {
   "jsonrpc": "2.0",
-  "method": "omo.run.progress",
+  "method": "lfe.run.progress",
   "params": { ... }
 }
 ```
@@ -113,7 +113,7 @@ All messages conform to JSON-RPC 2.0.
 
 Exactly four methods are defined for Phase 1. No additional methods may be added without a protocol version bump.
 
-### 4.1 `omo.initialize`
+### 4.1 `lfe.initialize`
 
 **Purpose:** Version negotiation, capability negotiation, and server identification.
 
@@ -130,17 +130,17 @@ Exactly four methods are defined for Phase 1. No additional methods may be added
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `protocolVersion` | string | yes | Server's negotiated protocol version |
-| `implementationName` | string | yes | Implementation name (e.g., `"omots"`, `"lfe"`) |
+| `implementationName` | string | yes | Implementation name (e.g., `"lfets"`, `"lfe"`) |
 | `acceptedCapabilities` | string[] | yes | Capabilities the server accepts for this session |
 | `serverMode` | string | yes | `"standalone"` or `"bridge"` |
 
 **Error cases:**
-- Version mismatch → `-32001` with `omoCode: "OMO_VERSION_MISMATCH"`
-- Invalid request shape → `-32600` with `omoCode: "OMO_INVALID_REQUEST"`
+- Version mismatch → `-32001` with `lfeCode: "LFE_VERSION_MISMATCH"`
+- Invalid request shape → `-32600` with `lfeCode: "LFE_INVALID_REQUEST"`
 
 ---
 
-### 4.2 `omo.session.start`
+### 4.2 `lfe.session.start`
 
 **Purpose:** Create a new orchestration session.
 
@@ -160,11 +160,11 @@ Exactly four methods are defined for Phase 1. No additional methods may be added
 
 **Error cases:**
 - Invalid request → `-32600`
-- Session creation failure → `-32010` with `omoCode: "OMO_RUN_FAILED"`
+- Session creation failure → `-32010` with `lfeCode: "LFE_RUN_FAILED"`
 
 ---
 
-### 4.3 `omo.run.dispatch`
+### 4.3 `lfe.run.dispatch`
 
 **Purpose:** Dispatch a prompt/run to an agent within a session.
 
@@ -172,7 +172,7 @@ Exactly four methods are defined for Phase 1. No additional methods may be added
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `runId` | string | yes | Client-provided run identifier (UUID recommended) |
-| `sessionId` | string | yes | Target session (must have been started via `omo.session.start`) |
+| `sessionId` | string | yes | Target session (must have been started via `lfe.session.start`) |
 | `prompt` | string | yes | The user prompt / instruction |
 | `agent` | string | no | Agent name (implementation-specific) |
 | `model` | string | no | Model identifier (implementation-specific) |
@@ -186,11 +186,11 @@ Exactly four methods are defined for Phase 1. No additional methods may be added
 
 **Error cases:**
 - Unknown session → `-32602`
-- Dispatch failure → `-32010` with `omoCode: "OMO_RUN_FAILED"`
+- Dispatch failure → `-32010` with `lfeCode: "LFE_RUN_FAILED"`
 
 ---
 
-### 4.4 `omo.run.cancel`
+### 4.4 `lfe.run.cancel`
 
 **Purpose:** Request cancellation of a running dispatch.
 
@@ -209,7 +209,7 @@ Exactly four methods are defined for Phase 1. No additional methods may be added
 **Semantics:**
 - Cancellation is best-effort.
 - If the run has already reached a terminal state (`completed`, `failed`, `cancelled`), the server SHOULD return the current status.
-- The server MUST eventually emit a terminal notification (`omo.run.result` or `omo.run.error`) for every dispatched run.
+- The server MUST eventually emit a terminal notification (`lfe.run.result` or `lfe.run.error`) for every dispatched run.
 
 ---
 
@@ -217,7 +217,7 @@ Exactly four methods are defined for Phase 1. No additional methods may be added
 
 Exactly three notifications are defined for Phase 1. Notifications are one-way server-to-client messages.
 
-### 5.1 `omo.run.progress`
+### 5.1 `lfe.run.progress`
 
 **Purpose:** Stream incremental progress updates for a run.
 
@@ -234,11 +234,11 @@ Exactly three notifications are defined for Phase 1. Notifications are one-way s
 - `queued`: Run accepted but not yet started.
 - `running`: Agent is actively processing.
 - `tool`: Agent invoked a tool (sub-phase of running).
-- `completed` / `failed` / `cancelled`: Terminal phases (server SHOULD also emit `omo.run.result` or `omo.run.error`).
+- `completed` / `failed` / `cancelled`: Terminal phases (server SHOULD also emit `lfe.run.result` or `lfe.run.error`).
 
 ---
 
-### 5.2 `omo.run.result`
+### 5.2 `lfe.run.result`
 
 **Purpose:** Deliver the final successful or terminal result of a run.
 
@@ -251,13 +251,13 @@ Exactly three notifications are defined for Phase 1. Notifications are one-way s
 | `outputJson` | object | no | Structured JSON output (if any) |
 | `finalSessionId` | string | yes | Session ID after run completion (may be unchanged or compacted) |
 
-**Guarantee:** Every `omo.run.dispatch` that is accepted MUST eventually produce exactly one of:
-- `omo.run.result` (terminal), or
-- `omo.run.error` (terminal error).
+**Guarantee:** Every `lfe.run.dispatch` that is accepted MUST eventually produce exactly one of:
+- `lfe.run.result` (terminal), or
+- `lfe.run.error` (terminal error).
 
 ---
 
-### 5.3 `omo.run.error`
+### 5.3 `lfe.run.error`
 
 **Purpose:** Report a terminal error for a run.
 
@@ -275,7 +275,7 @@ Exactly three notifications are defined for Phase 1. Notifications are one-way s
 
 ## 6. Error Envelope
 
-Errors follow JSON-RPC 2.0 with OMO-specific extensions.
+Errors follow JSON-RPC 2.0 with LFE-specific extensions.
 
 **Shape:**
 ```json
@@ -283,7 +283,7 @@ Errors follow JSON-RPC 2.0 with OMO-specific extensions.
   "code": <number>,
   "message": "<string>",
   "data": {
-    "omoCode": "<string>",
+    "lfeCode": "<string>",
     "retryable": <boolean>
   }
 }
@@ -297,38 +297,38 @@ Errors follow JSON-RPC 2.0 with OMO-specific extensions.
 | `-32601` | Method not found | Unknown method |
 | `-32602` | Invalid params | Parameter validation failure |
 | `-32603` | Internal error | Unhandled server error |
-| `-32001` | Version mismatch | `omo.initialize` protocolVersion rejected |
+| `-32001` | Version mismatch | `lfe.initialize` protocolVersion rejected |
 | `-32010` | Run failure | Dispatch or execution failure |
 
-**String OMO codes (in `error.data.omoCode`):**
+**String LFE codes (in `error.data.lfeCode`):**
 | Code | Description |
 |------|-------------|
-| `OMO_VERSION_MISMATCH` | Protocol version negotiation failed |
-| `OMO_INVALID_REQUEST` | Request shape or required fields missing |
-| `OMO_RUN_FAILED` | Run dispatch or execution failed |
+| `LFE_VERSION_MISMATCH` | Protocol version negotiation failed |
+| `LFE_INVALID_REQUEST` | Request shape or required fields missing |
+| `LFE_RUN_FAILED` | Run dispatch or execution failed |
 
-**Convention:** Numeric codes live in `error.code`. String OMO codes live in `error.data.omoCode`. Both SHOULD be populated for OMO-specific errors.
+**Convention:** Numeric codes live in `error.code`. String LFE codes live in `error.data.lfeCode`. Both SHOULD be populated for LFE-specific errors.
 
 ---
 
 ## 7. Version Negotiation
 
-Version negotiation occurs exclusively via `omo.initialize`.
+Version negotiation occurs exclusively via `lfe.initialize`.
 
 **Flow:**
-1. Client sends `omo.initialize` with `params.protocolVersion`.
+1. Client sends `lfe.initialize` with `params.protocolVersion`.
 2. Server responds with `result.protocolVersion` indicating the version it will use for this session.
-3. If the server cannot support the requested version, it returns error `-32001` / `OMO_VERSION_MISMATCH`.
+3. If the server cannot support the requested version, it returns error `-32001` / `LFE_VERSION_MISMATCH`.
 
 **Rule:** Both client and server MUST agree on a single protocol version for the lifetime of the stdio connection. There is no mid-session version upgrade.
 
-See also: `docs/protocol/omo-protocol-versioning.md` (separate document).
+See also: `docs/protocol/lfe-protocol-versioning.md` (separate document).
 
 ---
 
 ## 8. Capability Negotiation
 
-Capabilities are exchanged during `omo.initialize`.
+Capabilities are exchanged during `lfe.initialize`.
 
 **Client advertises intent:**
 ```json
@@ -354,13 +354,13 @@ A server that does not accept a requested capability MUST NOT advertise it in `a
 
 ## 9. Cancellation
 
-Cancellation is requested via `omo.run.cancel`.
+Cancellation is requested via `lfe.run.cancel`.
 
 **Semantics:**
 - Cancellation is advisory; the server makes a best-effort attempt to stop the run.
 - A run that is cancelled MUST eventually reach terminal state `"cancelled"`.
 - If the run has already completed or failed before cancellation is processed, the server returns the actual terminal status.
-- Every dispatched run MUST produce a terminal notification (`omo.run.result` or `omo.run.error`), even if cancelled.
+- Every dispatched run MUST produce a terminal notification (`lfe.run.result` or `lfe.run.error`), even if cancelled.
 
 **Terminal states:** `completed`, `failed`, `cancelled`.
 
@@ -382,11 +382,11 @@ The following fixture paths are required for conformance testing (all fixtures l
 - `protocol-fixtures/phase1/run.cancel.response.json`
 - `protocol-fixtures/phase1/error.version-mismatch.response.json`
 - `protocol-fixtures/phase1/error.invalid-request.response.json`
-- `protocol-fixtures/golden/omots-phase1-success.json`
+- `protocol-fixtures/golden/lfets-phase1-success.json`
 - `protocol-fixtures/golden/lfe-phase1-success.json`
 - `protocol-fixtures/golden/phase1-cancel.json`
 
-All implementations (`omots`, `lfe`) MUST pass the same fixture suite for a given protocol version.
+All implementations (`lfets`, `lfe`) MUST pass the same fixture suite for a given protocol version.
 
 ---
 
@@ -396,12 +396,12 @@ All implementations (`omots`, `lfe`) MUST pass the same fixture suite for a give
 Client → Server (initialize)
 Content-Length: 142
 
-{"jsonrpc":"2.0","id":1,"method":"omo.initialize","params":{"protocolVersion":"1.0.0","hostName":"opencode","hostVersion":"0.1.0","clientKind":"host-bridge","requestedCapabilities":["phase1.initialize","phase1.session-start"]}}
+{"jsonrpc":"2.0","id":1,"method":"lfe.initialize","params":{"protocolVersion":"1.0.0","hostName":"opencode","hostVersion":"0.1.0","clientKind":"host-bridge","requestedCapabilities":["phase1.initialize","phase1.session-start"]}}
 
 Server → Client (initialize result)
 Content-Length: 168
 
-{"jsonrpc":"2.0","id":1,"result":{"protocolVersion":"1.0.0","implementationName":"omots","acceptedCapabilities":["phase1.initialize","phase1.session-start"],"serverMode":"standalone"}}
+{"jsonrpc":"2.0","id":1,"result":{"protocolVersion":"1.0.0","implementationName":"lfets","acceptedCapabilities":["phase1.initialize","phase1.session-start"],"serverMode":"standalone"}}
 ```
 
 ---

@@ -7,7 +7,7 @@ public static class RuleFinder
     private static DeprecationLogger _logDeprecation = (_, _) => { };
     private static readonly HashSet<string> WarnedDirs = new(StringComparer.Ordinal);
     private static readonly HashSet<string> SisyphusSources = new([".sisyphus/rules", "~/.sisyphus/rules"]);
-    private const string SisyphusDeprecationMessage = "[rules] .sisyphus/rules is deprecated and will be removed in v4.3.0; migrate to .omo/rules";
+    private const string SisyphusDeprecationMessage = "[rules] .sisyphus/rules is deprecated and will be removed in v4.3.0; migrate to .lfe/rules";
 
     public static void SetDeprecationLogger(DeprecationLogger logger) => _logDeprecation = logger;
 

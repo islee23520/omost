@@ -81,7 +81,7 @@ internal static class CodexPluginPackager
         {
             name = PluginName,
             version = PluginVersion,
-            description = "lfe — .NET OMO toolkit as a full Codex plugin with hooks, skills, agents, and MCP.",
+            description = "lfe — .NET LFE toolkit as a full Codex plugin with hooks, skills, agents, and MCP.",
             authors = new[] { new { name = "Lina Lab" } },
             license = "MIT",
             keywords = new[] { "codex", "lfe", "hooks", "skills", "agents", "mcp" },
@@ -91,7 +91,7 @@ internal static class CodexPluginPackager
             @interface = new
             {
                 displayName = "lfe",
-                shortDescription = ".NET OMO toolkit for Codex",
+                shortDescription = ".NET LFE toolkit for Codex",
                 longDescription = "lfe exposes rules engine, comment checking, ultrawork, boulder tracking, AST search, and Codex dispatch as a unified Codex plugin.",
                 developerName = "Lina Lab",
                 category = "Developer Tools",
@@ -298,7 +298,7 @@ General programming skill with language-specific references and best practices.
             ["ultrawork"] = @"# lfe Ultrawork
 
 ## Description
-Goal-oriented autonomous work loop with evidence capture and verification.
+            Goal-oriented self-directed work loop with evidence capture and verification.
 
 ## Workflow
 1. Define clear goal with success criteria

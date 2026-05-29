@@ -27,8 +27,8 @@ public sealed class RuntimeTerminalGuaranteeTests
 
         var terminals = notifications.TerminalNotificationsFor("run-success");
         var result = Assert.Single(terminals);
-        Assert.Equal(OmoNotificationNames.RunResult, result.Method);
-        Assert.Equal(OmoRunStatusValues.Completed, result.Params.GetProperty("status").GetString());
+        Assert.Equal(LfeNotificationNames.RunResult, result.Method);
+        Assert.Equal(LfeRunStatusValues.Completed, result.Params.GetProperty("status").GetString());
     }
 
     [Fact]
@@ -43,7 +43,7 @@ public sealed class RuntimeTerminalGuaranteeTests
 
         var terminals = notifications.TerminalNotificationsFor("run-failure");
         var error = Assert.Single(terminals);
-        Assert.Equal(OmoNotificationNames.RunError, error.Method);
+        Assert.Equal(LfeNotificationNames.RunError, error.Method);
         Assert.Equal(ErrorCode.RunFailure, error.Params.GetProperty("code").GetInt32());
     }
 
@@ -58,7 +58,7 @@ public sealed class RuntimeTerminalGuaranteeTests
             executor.DispatchAsync(CreateRequest("run-cancelled"), CancellationToken.None));
 
         var terminal = Assert.Single(notifications.TerminalNotificationsFor("run-cancelled"));
-        Assert.Contains(terminal.Method, new[] { OmoNotificationNames.RunResult, OmoNotificationNames.RunError });
+        Assert.Contains(terminal.Method, new[] { LfeNotificationNames.RunResult, LfeNotificationNames.RunError });
     }
 
     [Fact]
@@ -87,8 +87,8 @@ public sealed class RuntimeTerminalGuaranteeTests
 
         var terminals = notifications.TerminalNotificationsFor("run-single-terminal");
         Assert.Single(terminals);
-        Assert.Equal(1, terminals.Count(static notification => notification.Method == OmoNotificationNames.RunResult));
-        Assert.DoesNotContain(terminals, static notification => notification.Method == OmoNotificationNames.RunError);
+        Assert.Equal(1, terminals.Count(static notification => notification.Method == LfeNotificationNames.RunResult));
+        Assert.DoesNotContain(terminals, static notification => notification.Method == LfeNotificationNames.RunError);
     }
 
     private static AgentOsRuntimeExecutor CreateExecutor(UlwHost host, CapturingNotificationEmitter notifications)
@@ -132,8 +132,8 @@ public sealed class RuntimeTerminalGuaranteeTests
             {
                 return _notifications
                     .Where(notification =>
-                        (notification.Method == OmoNotificationNames.RunResult ||
-                         notification.Method == OmoNotificationNames.RunError) &&
+                        (notification.Method == LfeNotificationNames.RunResult ||
+                         notification.Method == LfeNotificationNames.RunError) &&
                         notification.Params.TryGetProperty("runId", out var runIdElement) &&
                         runIdElement.GetString() == runId)
                     .ToArray();

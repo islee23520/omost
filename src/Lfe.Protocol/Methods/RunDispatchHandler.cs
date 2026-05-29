@@ -5,10 +5,10 @@ namespace Lfe.Protocol.Methods;
 
 public sealed class RunDispatchHandler : MethodHandlerBase<RunDispatchRequestParams, RunDispatchResult>
 {
-    private readonly IOmoRunExecutor _runExecutor;
+    private readonly ILfeRunExecutor _runExecutor;
 
-    public RunDispatchHandler(IOmoRunExecutor runExecutor)
-        : base(OmoMethodNames.RunDispatch)
+    public RunDispatchHandler(ILfeRunExecutor runExecutor)
+        : base(LfeMethodNames.RunDispatch)
     {
         _runExecutor = runExecutor;
     }

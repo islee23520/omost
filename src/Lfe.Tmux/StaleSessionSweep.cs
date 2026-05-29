@@ -24,7 +24,7 @@ public sealed record SweepDependencies(
 
 public static class StaleSessionSweep
 {
-    private static readonly Regex StaleSessionPattern = new("^omo-agents-(\\d+)(?:-([A-Za-z0-9]+))?$", RegexOptions.Compiled);
+    private static readonly Regex StaleSessionPattern = new("^lfe-agents-(\\d+)(?:-([A-Za-z0-9]+))?$", RegexOptions.Compiled);
 
     public static async Task<IReadOnlyList<string>> ListTmuxSessionsViaTmuxAsync(
         string tmux,
@@ -95,7 +95,7 @@ public static class StaleSessionSweep
         return killedSessionNames;
     }
 
-    public static async Task<int> SweepStaleOmoAgentSessionsWithAsync(SweepDependencies dependencies, CancellationToken cancellationToken = default)
+    public static async Task<int> SweepStaleLfeAgentSessionsWithAsync(SweepDependencies dependencies, CancellationToken cancellationToken = default)
     {
         var currentProcessId = dependencies.CurrentProcessId ?? Environment.ProcessId;
         var processAlive = dependencies.ProcessAlive ?? IsProcessAlive;
@@ -121,10 +121,10 @@ public static class StaleSessionSweep
         return killedSessionNames.Count;
     }
 
-    public static async Task<int> SweepStaleOmoAgentSessionsAsync(CancellationToken cancellationToken = default)
+    public static async Task<int> SweepStaleLfeAgentSessionsAsync(CancellationToken cancellationToken = default)
     {
         var dependencies = BuildRuntimeDependencies();
-        return await SweepStaleOmoAgentSessionsWithAsync(dependencies, cancellationToken);
+        return await SweepStaleLfeAgentSessionsWithAsync(dependencies, cancellationToken);
     }
 
     public static SweepDependencies BuildRuntimeDependencies()

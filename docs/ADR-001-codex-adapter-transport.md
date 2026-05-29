@@ -29,7 +29,7 @@ Package `Lfe.CodexAdapter` uses **spawn + JSONL** transport:
 
 ### Canonical composition path
 
-`CodexComposedOmoRuntime.CreateFromAdapter(CodexAdapterOptions)` in
+`CodexComposedLfeRuntime.CreateFromAdapter(CodexAdapterOptions)` in
 `Lfe.StandaloneRuntime` is the recommended entrypoint.  The legacy
 `Create(ICodexConversationClient)` overload is retained for backward
 compatibility.

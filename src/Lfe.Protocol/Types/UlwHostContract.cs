@@ -141,7 +141,7 @@ public sealed record UlwTodo
     public UlwTodoStatus Status { get; init; }
 }
 
-public static class OmoProtocolConstants
+public static class LfeProtocolConstants
 {
     public const string HeaderSeparator = "\r\n\r\n";
 }

@@ -65,7 +65,7 @@ public sealed class LifecycleTests
         {
             ["jsonrpc"] = "2.0",
             ["id"] = 1,
-            ["method"] = "omo.initialize",
+            ["method"] = "lfe.initialize",
             ["params"] = new JsonObject
             {
                 ["protocolVersion"] = "1.0.0",

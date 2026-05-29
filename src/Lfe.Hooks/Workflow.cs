@@ -119,9 +119,9 @@ public static partial class Workflow
         prompt.Contains("<system-") ? prompt :
         $"<system-reminder>{AtlasSingleTaskDirective}</system-reminder>\n{prompt}";
 
-    public static bool ShouldWarnAtlasDirectModification(string tool, string? filePath, bool isOmoPath = false) =>
+    public static bool ShouldWarnAtlasDirectModification(string tool, string? filePath, bool isLfePath = false) =>
         new[] { "write", "edit", "multiedit" }.Contains(tool.ToLowerInvariant()) &&
-        filePath is not null && !isOmoPath;
+        filePath is not null && !isLfePath;
 
     public static (string Kind, TrackedTaskRef? Task, string? Reason)? ResolveAtlasPendingTaskRef(
         string? callID, string? prompt, string? requestedSessionId = null, string[]? existingKeys = null)
@@ -210,7 +210,7 @@ public static partial class Workflow
     public static bool IsPlanFilePath(string filePath)
     {
         var normalized = filePath.ToLowerInvariant().Replace('\\', '/');
-        return normalized.Contains(".omo/plans/") && normalized.EndsWith(".md");
+        return normalized.Contains(".lfe/plans/") && normalized.EndsWith(".md");
     }
 
     public static PlanFormatValidationResult ValidatePlanFormat(string content, int parsedCount)

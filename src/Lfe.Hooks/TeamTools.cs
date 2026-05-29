@@ -207,14 +207,14 @@ public static partial class TeamTools
         return (subCommand, sessionName);
     }
 
-    public static bool IsOmoTmuxSession(string? sessionName) =>
-        sessionName is not null && sessionName.StartsWith("omo-");
+    public static bool IsLfeTmuxSession(string? sessionName) =>
+        sessionName is not null && sessionName.StartsWith("lfe-");
 
     public static string BuildInteractiveBashSessionReminder(IEnumerable<string> sessions)
     {
         var list = sessions.ToList();
         return list.Count == 0 ? "" :
-            $"\n\n[System Reminder] Active omo-* tmux sessions: {string.Join(", ", list)}";
+            $"\n\n[System Reminder] Active lfe-* tmux sessions: {string.Join(", ", list)}";
     }
 
     #endregion

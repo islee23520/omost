@@ -12,8 +12,8 @@ public sealed class InitializeHandler : MethodHandlerBase<InitializeRequestParam
         string protocolVersion,
         string implementationName,
         IEnumerable<string> supportedCapabilities,
-        string serverMode = OmoServerModes.Standalone)
-        : base(OmoMethodNames.Initialize)
+        string serverMode = LfeServerModes.Standalone)
+        : base(LfeMethodNames.Initialize)
     {
         ProtocolVersion = protocolVersion;
         ImplementationName = implementationName;
@@ -36,9 +36,9 @@ public sealed class InitializeHandler : MethodHandlerBase<InitializeRequestParam
         RequestValidator.RequireNonEmptyString(parameters.ClientKind, "clientKind");
         RequestValidator.RequireStringArray(parameters.RequestedCapabilities, "requestedCapabilities");
 
-        if (!OmoClientKinds.IsValid(parameters.ClientKind))
+        if (!LfeClientKinds.IsValid(parameters.ClientKind))
         {
-            throw OmoProtocolErrors.InvalidRequest(
+            throw LfeProtocolErrors.InvalidRequest(
                 $"Method '{MethodName}' received an unsupported clientKind '{parameters.ClientKind}'.");
         }
     }
@@ -51,7 +51,7 @@ public sealed class InitializeHandler : MethodHandlerBase<InitializeRequestParam
 
         if (!string.Equals(parameters.ProtocolVersion, ProtocolVersion, StringComparison.Ordinal))
         {
-            throw OmoProtocolErrors.VersionMismatch(parameters.ProtocolVersion, ProtocolVersion);
+            throw LfeProtocolErrors.VersionMismatch(parameters.ProtocolVersion, ProtocolVersion);
         }
 
         var acceptedCapabilities = parameters.RequestedCapabilities

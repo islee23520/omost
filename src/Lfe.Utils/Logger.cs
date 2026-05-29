@@ -7,7 +7,7 @@ public sealed record LoggerTestOverrides(string? FilePath = null, long? MaxSizeB
 
 public static class Logger
 {
-    private const string DefaultLogFilename = "omo.log";
+    private const string DefaultLogFilename = "lfe.log";
     private const long DefaultMaxLogFileSizeBytes = 50L * 1024L * 1024L;
     private const int DefaultMaxLogFileBackups = 2;
     private const int FlushIntervalMilliseconds = 500;

@@ -2,28 +2,28 @@ namespace Lfe.Hooks;
 
 #region Hook Definition Types
 
-public enum OmoHookStatus { BehaviorMapped, AdapterBound, Missing }
+public enum LfeHookStatus { BehaviorMapped, AdapterBound, Missing }
 
-public enum OmoHookExitPath { PureDomainPort, AdapterBound, LimitedRedesign, ExplicitExclusion, Unclassified }
+public enum LfeHookExitPath { PureDomainPort, AdapterBound, LimitedRedesign, ExplicitExclusion, Unclassified }
 
-public enum OmoHookWave { Phase1Safety, Phase2Recovery, Phase3Orchestration, Phase4Host, Phase5AdapterConvergence }
+public enum LfeHookWave { Phase1Safety, Phase2Recovery, Phase3Orchestration, Phase4Host, Phase5AdapterConvergence }
 
-public enum OmoHookTestType { Unit, Parity, Adapter, Integration, ManualQa }
+public enum LfeHookTestType { Unit, Parity, Adapter, Integration, ManualQa }
 
-public enum OmoHookAdapterImpact { None, Low, Medium, High }
+public enum LfeHookAdapterImpact { None, Low, Medium, High }
 
-public sealed record OmoHookDefinition(
+public sealed record LfeHookDefinition(
     string Name,
     string OriginalExport,
     string Domain,
-    OmoHookStatus Status,
+    LfeHookStatus Status,
     string? StandalonePackage,
     string OriginalSource,
-    OmoHookExitPath ExitPath,
+    LfeHookExitPath ExitPath,
     string TargetPackage,
-    OmoHookWave Wave,
-    List<OmoHookTestType> TestTypes,
-    OmoHookAdapterImpact AdapterImpact
+    LfeHookWave Wave,
+    List<LfeHookTestType> TestTypes,
+    LfeHookAdapterImpact AdapterImpact
 );
 
 #endregion

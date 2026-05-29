@@ -13,6 +13,6 @@ public sealed class ProgressEmitter
 
     public Task EmitAsync(RunProgressParams parameters, CancellationToken cancellationToken = default)
     {
-        return _notificationEmitter.EmitAsync(OmoNotificationNames.RunProgress, parameters, cancellationToken);
+        return _notificationEmitter.EmitAsync(LfeNotificationNames.RunProgress, parameters, cancellationToken);
     }
 }

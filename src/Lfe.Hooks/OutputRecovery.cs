@@ -145,7 +145,7 @@ public static partial class OutputRecovery
 
     public static string AppendTaskResumeInfo(string tool, string output, object? metadata)
     {
-        if (!new[] { "task", "Task", "task_tool", "call_omo_agent" }.Contains(tool)) return output;
+        if (!new[] { "task", "Task", "task_tool", "call_lfe_agent" }.Contains(tool)) return output;
         if (output.StartsWith("Error:") || output.StartsWith("Failed") || output.Contains("\nto continue:"))
             return output;
 

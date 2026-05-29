@@ -192,7 +192,7 @@ internal static class ProjectLayers
         ["Lfe.UlwLoopState"] = ProjectLayer.Runtime,
 
         ["Lfe.AgentOs"] = ProjectLayer.Composition,
-        ["Lfe.AgentOs.OmoPreset"] = ProjectLayer.Composition,
+        ["Lfe.AgentOs.LfePreset"] = ProjectLayer.Composition,
 
         ["Lfe.AstGrepMcp"] = ProjectLayer.HostAdapter,
         ["Lfe.CodexAdapter"] = ProjectLayer.HostAdapter,

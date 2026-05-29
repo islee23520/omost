@@ -46,7 +46,7 @@ public interface IUlwHost
     Action OnEvent(Action<UlwSessionEvent> listener);
 }
 
-public static class OmoProtocolConstants
+public static class LfeProtocolConstants
 {
     public const string ProtocolVersion = "1.0.0";
     public const string HeaderSeparator = "\r\n\r\n";
@@ -61,22 +61,22 @@ public static class OmoProtocolConstants
     ];
 }
 
-public static class OmoMethods
+public static class LfeMethods
 {
-    public const string Initialize = "omo.initialize";
-    public const string SessionStart = "omo.session.start";
-    public const string RunDispatch = "omo.run.dispatch";
-    public const string RunCancel = "omo.run.cancel";
+    public const string Initialize = "lfe.initialize";
+    public const string SessionStart = "lfe.session.start";
+    public const string RunDispatch = "lfe.run.dispatch";
+    public const string RunCancel = "lfe.run.cancel";
 }
 
-public static class OmoNotifications
+public static class LfeNotifications
 {
-    public const string RunProgress = "omo.run.progress";
-    public const string RunResult = "omo.run.result";
-    public const string RunError = "omo.run.error";
+    public const string RunProgress = "lfe.run.progress";
+    public const string RunResult = "lfe.run.result";
+    public const string RunError = "lfe.run.error";
 }
 
-public static class OmoJsonRpcErrorCodes
+public static class LfeJsonRpcErrorCodes
 {
     public const int ParseError = -32700;
     public const int InvalidRequest = -32600;
@@ -87,33 +87,33 @@ public static class OmoJsonRpcErrorCodes
     public const int RunFailed = -32010;
 }
 
-public static class OmoErrorCodes
+public static class LfeErrorCodes
 {
-    public const string VersionMismatch = "OMO_VERSION_MISMATCH";
-    public const string InvalidRequest = "OMO_INVALID_REQUEST";
-    public const string RunFailed = "OMO_RUN_FAILED";
+    public const string VersionMismatch = "LFE_VERSION_MISMATCH";
+    public const string InvalidRequest = "LFE_INVALID_REQUEST";
+    public const string RunFailed = "LFE_RUN_FAILED";
 }
 
-public enum OmotsClientKind
+public enum LfetsClientKind
 {
     HostBridge,
     ImplementationToolkit,
 }
 
-public enum OmotsServerMode
+public enum LfetsServerMode
 {
     Standalone,
     Bridge,
 }
 
-public enum OmotsCancellationStatus
+public enum LfetsCancellationStatus
 {
     Cancelled,
     Completed,
     Failed,
 }
 
-public enum OmotsRunPhase
+public enum LfetsRunPhase
 {
     Queued,
     Running,
@@ -123,21 +123,21 @@ public enum OmotsRunPhase
     Cancelled,
 }
 
-public enum OmotsRunStatus
+public enum LfetsRunStatus
 {
     Completed,
     Failed,
     Cancelled,
 }
 
-public enum OmotsSessionState
+public enum LfetsSessionState
 {
     Created,
     Active,
     Completed,
 }
 
-public enum OmotsRunLifecycleState
+public enum LfetsRunLifecycleState
 {
     Accepted,
     Queued,
@@ -151,14 +151,14 @@ public sealed record InitializeParams(
     string ProtocolVersion,
     string HostName,
     string HostVersion,
-    OmotsClientKind ClientKind,
+    LfetsClientKind ClientKind,
     IReadOnlyList<string> RequestedCapabilities);
 
 public sealed record InitializeResult(
     string ProtocolVersion,
     string ImplementationName,
     IReadOnlyList<string> AcceptedCapabilities,
-    OmotsServerMode ServerMode);
+    LfetsServerMode ServerMode);
 
 public sealed record SessionStartParams(
     string SessionId,
@@ -180,25 +180,25 @@ public sealed record RunDispatchResult(string RunId, bool Accepted);
 
 public sealed record RunCancelParams(string RunId, string? Reason = null);
 
-public sealed record RunCancelResult(string RunId, OmotsCancellationStatus Status);
+public sealed record RunCancelResult(string RunId, LfetsCancellationStatus Status);
 
 public sealed record RunProgressParams(
     string RunId,
-    OmotsRunPhase Phase,
+    LfetsRunPhase Phase,
     string? Message = null,
     int? Completed = null,
     int? Total = null);
 
 public sealed record RunResultParams(
     string RunId,
-    OmotsRunStatus Status,
+    LfetsRunStatus Status,
     string? OutputText,
     IReadOnlyDictionary<string, object?>? OutputJson,
     string FinalSessionId);
 
 public sealed record RunErrorParams(string RunId, int Code, string Message, bool Retryable);
 
-public sealed record JsonRpcErrorData(string? OmoCode = null, bool? Retryable = null);
+public sealed record JsonRpcErrorData(string? LfeCode = null, bool? Retryable = null);
 
 public sealed record JsonRpcError(int Code, string Message, JsonRpcErrorData? Data = null);
 
@@ -210,23 +210,23 @@ public sealed record JsonRpcRequest<TParams>(string Jsonrpc, object? Id, string 
 
 public sealed record JsonRpcNotification<TParams>(string Jsonrpc, string Method, TParams Params);
 
-public static class OmoProtocol
+public static class LfeProtocol
 {
     private static readonly HashSet<string> Phase1CapabilitySet =
-        [.. OmoProtocolConstants.Phase1Capabilities];
+        [.. LfeProtocolConstants.Phase1Capabilities];
 
-    private static readonly HashSet<OmotsRunLifecycleState> TerminalRunLifecycleStates =
+    private static readonly HashSet<LfetsRunLifecycleState> TerminalRunLifecycleStates =
     [
-        OmotsRunLifecycleState.Completed,
-        OmotsRunLifecycleState.Failed,
-        OmotsRunLifecycleState.Cancelled,
+        LfetsRunLifecycleState.Completed,
+        LfetsRunLifecycleState.Failed,
+        LfetsRunLifecycleState.Cancelled,
     ];
 
-    private static readonly HashSet<OmotsRunStatus> TerminalRunStatuses =
+    private static readonly HashSet<LfetsRunStatus> TerminalRunStatuses =
     [
-        OmotsRunStatus.Completed,
-        OmotsRunStatus.Failed,
-        OmotsRunStatus.Cancelled,
+        LfetsRunStatus.Completed,
+        LfetsRunStatus.Failed,
+        LfetsRunStatus.Cancelled,
     ];
 
     public static IReadOnlyList<string> GetAcceptedCapabilities(IEnumerable<string> requestedCapabilities)
@@ -244,12 +244,12 @@ public static class OmoProtocol
     }
 
     public static bool IsSupportedProtocolVersion(string protocolVersion)
-        => string.Equals(protocolVersion, OmoProtocolConstants.ProtocolVersion, StringComparison.Ordinal);
+        => string.Equals(protocolVersion, LfeProtocolConstants.ProtocolVersion, StringComparison.Ordinal);
 
-    public static bool IsTerminalRunLifecycleState(OmotsRunLifecycleState state)
+    public static bool IsTerminalRunLifecycleState(LfetsRunLifecycleState state)
         => TerminalRunLifecycleStates.Contains(state);
 
-    public static bool IsTerminalRunStatus(OmotsRunStatus status)
+    public static bool IsTerminalRunStatus(LfetsRunStatus status)
         => TerminalRunStatuses.Contains(status);
 
     public static int? ParseContentLength(string headers)
@@ -275,7 +275,7 @@ public static class OmoProtocol
     public static string CreateContentLengthFrame<TMessage>(TMessage message)
     {
         var body = JsonSerializer.Serialize(message);
-        return $"Content-Length: {Encoding.UTF8.GetByteCount(body)}{OmoProtocolConstants.HeaderSeparator}{body}";
+        return $"Content-Length: {Encoding.UTF8.GetByteCount(body)}{LfeProtocolConstants.HeaderSeparator}{body}";
     }
 
     public static string? GetInitializeValidationError(object? value)

@@ -45,5 +45,5 @@ public static class UlwLoopConstants
     public const string UltraworkVerificationPromise = "VERIFIED";
     public const int DefaultMaxIterations = 100;
     public const int UltraworkMaxIterations = 500;
-    public const string DefaultStateFile = ".omo/ulw-loop.local.md";
+    public const string DefaultStateFile = ".lfe/ulw-loop.local.md";
 }

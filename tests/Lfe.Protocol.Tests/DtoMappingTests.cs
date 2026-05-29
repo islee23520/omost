@@ -98,7 +98,7 @@ public sealed class DtoMappingTests
         var host = new CapturingUlwHost("runtime-session", "dispatch-4");
         var executor = new AgentOsRuntimeExecutor(host);
 
-        var exception = await Assert.ThrowsAsync<OmoProtocolException>(() => executor.DispatchAsync(new RunDispatchRequestParams
+        var exception = await Assert.ThrowsAsync<LfeProtocolException>(() => executor.DispatchAsync(new RunDispatchRequestParams
         {
             RunId = "run-invalid",
             SessionId = string.Empty,

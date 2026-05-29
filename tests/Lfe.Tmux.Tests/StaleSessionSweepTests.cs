@@ -11,10 +11,10 @@ public sealed class StaleSessionSweepTests
             GetTmuxPathAsync: static (_, _) => Task.FromResult<string?>("tmux"),
             ListCandidateSessionsAsync: static (_, _) => Task.FromResult<IReadOnlyList<string>>([
                 "main",
-                "omo-agents-12345",
-                "omo-agents-88888",
-                "omo-agents-99999",
-                "omo-agents-99991-abc",
+                "lfe-agents-12345",
+                "lfe-agents-88888",
+                "lfe-agents-99999",
+                "lfe-agents-99991-abc",
             ]),
             KillSessionAsync: (sessionName, _) =>
             {
@@ -25,10 +25,10 @@ public sealed class StaleSessionSweepTests
             ProcessAlive: static pid => pid == 88888,
             CurrentProcessId: 12345);
 
-        var count = await StaleSessionSweep.SweepStaleOmoAgentSessionsWithAsync(dependencies);
+        var count = await StaleSessionSweep.SweepStaleLfeAgentSessionsWithAsync(dependencies);
 
         Assert.Equal(2, count);
-        Assert.Equal(["omo-agents-99999", "omo-agents-99991-abc"], killed);
+        Assert.Equal(["lfe-agents-99999", "lfe-agents-99991-abc"], killed);
     }
 
     [Fact]
@@ -38,7 +38,7 @@ public sealed class StaleSessionSweepTests
         var dependencies = new SweepTmuxSessionsDependencies(
             IsInsideTmux: static () => true,
             GetTmuxPathAsync: static (_, _) => Task.FromResult<string?>("tmux"),
-            ListCandidateSessionsAsync: static (_, _) => Task.FromResult<IReadOnlyList<string>>(["omo-team-A", "omo-team-B", "main", "omo-agents-99999"]),
+            ListCandidateSessionsAsync: static (_, _) => Task.FromResult<IReadOnlyList<string>>(["lfe-team-A", "lfe-team-B", "main", "lfe-agents-99999"]),
             KillSessionAsync: (sessionName, _) =>
             {
                 killed.Add(sessionName);
@@ -46,7 +46,7 @@ public sealed class StaleSessionSweepTests
             },
             Log: static (_, _) => { });
 
-        var prefixResult = await StaleSessionSweep.SweepTmuxSessionsWithAsync(dependencies, new SweepTmuxSessionsOptions(Prefix: "omo-team-"));
+        var prefixResult = await StaleSessionSweep.SweepTmuxSessionsWithAsync(dependencies, new SweepTmuxSessionsOptions(Prefix: "lfe-team-"));
         var predicateResult = await StaleSessionSweep.SweepTmuxSessionsWithAsync(
             new SweepTmuxSessionsDependencies(
                 IsInsideTmux: static () => true,
@@ -56,8 +56,8 @@ public sealed class StaleSessionSweepTests
                 Log: static (_, _) => { }),
             new SweepTmuxSessionsOptions(Predicate: static sessionName => sessionName == "kill-me"));
 
-        Assert.Equal(["omo-team-A", "omo-team-B"], prefixResult);
-        Assert.Equal(["omo-team-A", "omo-team-B"], killed);
+        Assert.Equal(["lfe-team-A", "lfe-team-B"], prefixResult);
+        Assert.Equal(["lfe-team-A", "lfe-team-B"], killed);
         Assert.Equal(["kill-me"], predicateResult);
     }
 }

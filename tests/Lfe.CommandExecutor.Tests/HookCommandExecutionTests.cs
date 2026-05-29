@@ -59,14 +59,14 @@ public sealed class HookCommandExecutionTests
         {
             var result = await EnvironmentScope.RunAsync(async () =>
             {
-                Environment.SetEnvironmentVariable("__OMODOT_ALLOWED", "visible");
-                Environment.SetEnvironmentVariable("__OMODOT_SECRET", "hidden");
+                Environment.SetEnvironmentVariable("__LFEDOT_ALLOWED", "visible");
+                Environment.SetEnvironmentVariable("__LFEDOT_SECRET", "hidden");
 
                 return await HookCommandExecution.ExecuteHookCommandAsync(
-                    "printf \"%s|%s|%s\" \"$__OMODOT_ALLOWED\" \"$__OMODOT_SECRET\" \"$CLAUDE_PROJECT_DIR\"",
+                    "printf \"%s|%s|%s\" \"$__LFEDOT_ALLOWED\" \"$__LFEDOT_SECRET\" \"$CLAUDE_PROJECT_DIR\"",
                     string.Empty,
                     tempDirectory.FullName,
-                    new ExecuteHookOptions(AllowedEnvVars: ["__OMODOT_ALLOWED"]));
+                    new ExecuteHookOptions(AllowedEnvVars: ["__LFEDOT_ALLOWED"]));
             });
 
             Assert.Equal(0, result.ExitCode);
